@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 2 หลักการออกแบบเว็บไซต์</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Sarabun', sans-serif;
+    background:#ffffff;
+    color:#1a1a1a;
+    line-height:1.7;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:0 40px;}
+
+  .title-banner{
+    background:#EE3355;
+    color:#fff;
+    text-align:center;
+    padding:22px 20px 26px;
+    margin-bottom:30px;
+  }
+  .title-banner h1{font-size:22px; font-weight:700; margin-bottom:4px;}
+  .title-banner h2{font-size:22px; font-weight:700;}
+
+  .red-tag{
+    background:#EE3355;
+    color:#fff;
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:4px;
+    font-size:14px;
+    font-weight:600;
+    margin:26px 0 18px;
+  }
+  .red-tag.center{display:block; width:fit-content; margin-left:auto; margin-right:auto; text-align:center;}
+
+  ul{list-style:none;}
+  .indent1{margin-left:20px;}
+  li{margin-bottom:6px; font-size:14.5px;}
+  li::before{content:"• "; }
+
+  p.plain{margin:6px 0; font-size:14.5px;}
+
+  .list-center li{text-align:center; font-size:14.5px; margin-bottom:10px;}
+  .list-center{margin-top:10px;}
+
+  .row{display:flex; align-items:flex-start; gap:30px; margin-top:10px;}
+  .row .visual{flex:0 0 auto;}
+  .row .content{flex:1;}
+
+  /* color wheel */
+  .wheel{
+    width:170px; height:170px; border-radius:50%;
+    background:conic-gradient(
+      #e03c3c 0deg 30deg, #9b3fc2 30deg 60deg, #3b5fd9 60deg 90deg,
+      #2aa6e0 90deg 120deg, #2ab7a0 120deg 150deg, #3fbf5e 150deg 180deg,
+      #a6c93a 180deg 210deg, #e0c93a 210deg 240deg, #e0972a 240deg 270deg,
+      #e0602a 270deg 300deg, #e03c6a 300deg 330deg, #c23c8f 330deg 360deg
+    );
+    position:relative;
+  }
+  .wheel-center{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:96px; height:96px; border-radius:50%; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; font-weight:700; font-size:14px; color:#222;
+    box-shadow:0 0 0 1px #eee;
+  }
+
+  /* typography sample */
+  .big-letter{font-size:150px; font-weight:700; line-height:1; font-family:Georgia, 'Times New Roman', serif;}
+  .yay{font-size:52px; font-weight:800; font-family:'Sarabun',sans-serif; position:relative; display:inline-block;}
+  .yay span{display:inline-block;}
+  .yay .y1{color:#f2c230;}
+  .yay .a{color:#3fa14a;}
+  .yay .y2{color:#d94040;}
+  .yay .bang{color:#2a5db0;}
+  .yay-underline{width:130px; height:8px; background:#e8a0c0; border-radius:6px; margin:4px auto 0;}
+
+  /* layout wireframe */
+  .wireframe{border:1px solid #333; width:260px; font-size:12px; text-align:center;}
+  .wireframe .cell{border:1px solid #333; padding:14px 4px;}
+  .wireframe .content-row{display:flex;}
+  .wireframe .content-row .stack{flex:1; display:flex; flex-direction:column;}
+  .wireframe .content-row .aside{width:80px; display:flex; align-items:center; justify-content:center; border:1px solid #333; padding:4px;}
+
+  /* prototype flow */
+  .flow{display:flex; flex-direction:column; align-items:center; gap:4px;}
+  .flow .step{
+    background:#8fb4e8; border:1px solid #4a6fa8; border-radius:5px;
+    padding:8px 14px; font-size:12.5px; text-align:center; width:150px;
+  }
+  .flow .arrow{font-size:14px; color:#333;}
+  .flow .loop{
+    border:1px dashed #e0a020; border-radius:6px; padding:4px 10px;
+    font-size:11px; color:#b07a10; margin:2px 0;
+  }
+
+  /* gears */
+  .gears{display:flex; align-items:flex-end; gap:6px;}
+  .gear{
+    border-radius:50%; position:relative;
+  }
+  .gear::before{
+    content:''; position:absolute; inset:8px; border-radius:50%; background:#fff;
+  }
+  .gear.g1{width:70px; height:70px; background:#2a4f8f;}
+  .gear.g2{width:60px; height:60px; background:#8fb4e8; margin-bottom:-10px;}
+  .gear.g3{width:44px; height:44px; background:#bcd4f0; margin-bottom:-16px;}
+
+  h4.section-plain{font-size:14.5px; font-weight:700; margin:8px 0 4px;}
+</style>
+<div class="top-bar">
+        <a class="btn-back" href="file:///C:/Users/pc/Downloads/Banklnwza/sss.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</head>
+<body>
+<div class="title-banner">
+  <h1>บทที่ 2</h1>
+  <h2>หลักการออกแบบเว็บไซต์</h2>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. Color Theory -->
+  <div class="red-tag">1. ทฤษฎีการใช้สี (Color Theory)</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="wheel"><div class="wheel-center">Color<br>Theory</div></div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>สีช่วยสร้างอารมณ์ ความรู้สึก และภาพลักษณ์ของแบรนด์ ตัวอย่างการใช้สี:</li>
+        <li>สีน้ำเงิน = ความน่าเชื่อถือ</li>
+        <li>สีแดง = ความตื่นเต้น กระตุ้นการตัดสินใจ</li>
+        <li>สีเขียว = ธรรมชาติ ความปลอดภัย</li>
+        <li>สีดำ = ความหรูหรา ทันสมัย</li>
+        <li>ควรเลือกชุดสี (Color Palette) ให้เหมาะกับประเภทเว็บไซต์และแบรนด์</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2. Typography -->
+  <div class="red-tag">2.การเลือกใช้ตัวอักษร (Typography)</div>
+
+  <div class="row">
+    <div class="visual"><div class="big-letter">A</div></div>
+    <div class="content">
+      <div style="text-align:center; margin-bottom:14px;">
+        <div class="yay"><span class="y1">Y</span><span class="a">A</span><span class="y2">Y</span><span class="bang">!</span></div>
+        <div class="yay-underline"></div>
+      </div>
+      <ul class="list-center">
+        <li>เลือกฟอนต์ที่อ่านง่ายและเหมาะกับเนื้อหา</li>
+        <li>คำนึงถึงความแตกต่างระหว่างสีข้อความและพื้นหลัง (Contrast)</li>
+        <li>ใช้หลัก Visual Hierarchy เช่น ขนาด ความหนา และการเว้นระยะ เพื่อจัดลำดับความสำคัญของข้อมูล</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. Layout -->
+  <div class="red-tag center">3.องค์ประกอบและ Layout</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="wireframe">
+        <div class="cell">&lt;header&gt;</div>
+        <div class="cell">&lt;nav&gt;</div>
+        <div class="content-row">
+          <div class="stack">
+            <div class="cell">&lt;section&gt;</div>
+            <div class="cell">&lt;article&gt;</div>
+          </div>
+          <div class="aside">&lt;aside&gt;</div>
+        </div>
+        <div class="cell">&lt;footer&gt;</div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="indent1" style="font-weight:600; font-size:16px;">
+        <li>Header – โลโก้ เมนูนำทาง ช่องค้นหา</li>
+        <li>Content Area – พื้นที่แสดงเนื้อหาหลัก</li>
+        <li>Footer – ข้อมูลติดต่อ นโยบาย และลิงก์สำคัญ</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. Prototype -->
+  <div class="red-tag">4. การทำ Prototype</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="flow">
+        <div class="step">กำหนดความต้องการ</div>
+        <div class="arrow">↓</div>
+        <div class="step">ออกแบบต้นแบบ</div>
+        <div class="arrow">↓</div>
+        <div class="step">นำต้นแบบไปใช้</div>
+        <div class="arrow">↓</div>
+        <div class="step">ปรับแต่งต้นแบบ</div>
+        <div class="arrow">↓</div>
+        <div class="step">ต้นแบบที่สมบูรณ์</div>
+        <div class="loop">↻ ปรับปรุงซ้ำจนสมบูรณ์</div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>สร้างต้นแบบก่อนพัฒนาเว็บไซต์จริง</li>
+        <li>Wireframe : โครงร่างพื้นฐาน เน้นตำแหน่งองค์ประกอบ</li>
+        <li>Mockup : แบบจำลองที่มีสี รูปภาพ และรายละเอียดใกล้เคียงของจริง</li>
+        <li>ช่วยลดข้อผิดพลาดและประหยัดเวลาในการพัฒนา</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5. Modern Design Techniques -->
+  <div class="red-tag center">5. เทคนิคการออกแบบสมัยใหม่</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="gears">
+        <div class="gear g1"></div>
+        <div class="gear g2"></div>
+        <div class="gear g3"></div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center" style="font-weight:600; font-size:16px;">
+        <li>Responsive Design : เว็บไซต์ปรับขนาดอัตโนมัติตามอุปกรณ์ (คอมพิวเตอร์ แท็บเล็ต มือถือ)</li>
+        <li>Mobile First Design : ออกแบบสำหรับมือถือก่อน แล้วค่อยขยายไปยังหน้าจอใหญ่</li>
+      </ul>
+    </div>
+  </div>
+</div>
+ <div class="top-bar">
+        <a class="btn-back" href="index.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</div>
+</body>
+</html>

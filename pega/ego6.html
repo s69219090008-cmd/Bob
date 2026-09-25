@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 6 การสร้างตารางข้อมูล</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Sarabun', sans-serif;
+    background:#ffffff;
+    color:#1a1a1a;
+    line-height:1.7;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:0 40px;}
+
+  .title-banner{
+    background:#EE3355;
+    color:#fff;
+    text-align:center;
+    padding:22px 20px 26px;
+    margin-bottom:30px;
+  }
+  .title-banner h1{font-size:22px; font-weight:700; margin-bottom:4px;}
+  .title-banner h2{font-size:22px; font-weight:700;}
+
+  .red-tag{
+    background:#EE3355;
+    color:#fff;
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:4px;
+    font-size:14px;
+    font-weight:600;
+    margin:26px 0 18px;
+  }
+  .red-tag.center{display:block; width:fit-content; margin-left:auto; margin-right:auto; text-align:center;}
+
+  ul{list-style:none;}
+  .indent1{margin-left:20px;}
+  li{margin-bottom:6px; font-size:14.5px;}
+  li::before{content:"• "; }
+
+  p.plain{margin:6px 0; font-size:14.5px;}
+
+  .list-center li{text-align:center; font-size:14.5px; margin-bottom:10px;}
+  .list-center{margin-top:10px;}
+
+  .row{display:flex; align-items:flex-start; gap:30px; margin-top:10px;}
+  .row .visual{flex:0 0 auto;}
+  .row .content{flex:1;}
+
+  h4.section-plain{font-size:14.5px; font-weight:700; margin:8px 0 4px;}
+
+  /* 1. bookshelf / grid overview */
+  .shelf-grid{
+    width:190px; border:3px solid #2a4f8f; border-radius:6px; overflow:hidden;
+  }
+  .shelf-grid .srow{display:flex; border-bottom:3px solid #2a4f8f;}
+  .shelf-grid .srow:last-child{border-bottom:none;}
+  .shelf-grid .scell{
+    flex:1; height:34px; border-right:2px solid #bcd4f0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .shelf-grid .scell:last-child{border-right:none;}
+  .shelf-grid .srow:nth-child(1) .scell{background:#2a4f8f;}
+  .shelf-grid .srow:nth-child(2) .scell{background:#8fb4e8;}
+  .shelf-grid .srow:nth-child(3) .scell{background:#bcd4f0;}
+
+  /* 2. <table> frame */
+  .table-tag-scene{
+    width:190px; height:150px; border:4px solid #333; border-radius:6px;
+    display:flex; align-items:center; justify-content:center; position:relative; background:#fafafa;
+  }
+  .table-tag-scene .code-label{
+    position:absolute; top:-13px; left:50%; transform:translateX(-50%);
+    background:#EE3355; color:#fff; font-size:10.5px; font-weight:700;
+    padding:3px 10px; border-radius:10px; white-space:nowrap;
+  }
+  .table-tag-scene .inner-note{font-size:11px; color:#888; text-align:center; padding:10px;}
+
+  /* 3. <tr> horizontal rows */
+  .tr-scene{width:190px; display:flex; flex-direction:column; gap:6px;}
+  .tr-scene .trow{
+    height:26px; border-radius:4px; display:flex; align-items:center; padding-left:10px;
+    font-size:10.5px; color:#fff; font-weight:600;
+  }
+  .tr-scene .trow:nth-child(1){background:#e0602a;}
+  .tr-scene .trow:nth-child(2){background:#e0972a;}
+  .tr-scene .trow:nth-child(3){background:#e0c93a; color:#5a4a00;}
+
+  /* 4. <td> columns */
+  .td-scene{width:190px;}
+  .td-scene .track{display:flex; gap:5px; height:44px;}
+  .td-scene .box{
+    flex:1; background:#3fa14a; border-radius:4px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; color:#fff; font-weight:600;
+  }
+  .td-scene .box:nth-child(2){background:#5cb86a;}
+  .td-scene .box:nth-child(3){background:#8fd39a;}
+  .td-scene .caption{text-align:center; font-size:10.5px; color:#888; margin-top:8px;}
+
+  /* 5. <th> header */
+  .th-scene{width:190px;}
+  .th-scene .head-row{
+    background:#2a4f8f; border-radius:5px 5px 0 0; padding:10px 6px;
+    display:flex; gap:6px;
+  }
+  .th-scene .head-cell{
+    flex:1; text-align:center; color:#fff; font-weight:700; font-size:11px;
+  }
+  .th-scene .body-row{
+    border:1px solid #ddd; border-top:none; padding:8px 6px; display:flex; gap:6px;
+  }
+  .th-scene .body-cell{flex:1; text-align:center; font-size:10.5px; color:#555;}
+  .th-scene .a11y{
+    margin-top:10px; display:flex; align-items:center; justify-content:center; gap:6px;
+    font-size:10.5px; color:#2a4f8f; font-weight:600;
+  }
+  .a11y-icon{
+    width:18px; height:18px; border-radius:50%; background:#2a4f8f; color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:11px;
+  }
+
+  /* example code + result */
+  .example-block{display:flex; gap:24px; flex-wrap:wrap; margin-top:16px;}
+  .code-box{
+    flex:1; min-width:260px; background:#1e1e2e; border-radius:8px; padding:16px 18px;
+    font-family:'Courier New',monospace; font-size:12px; color:#d6d6e0; overflow-x:auto;
+  }
+  .code-box .tag{color:#8fb4e8;}
+  .code-box .attr{color:#e0c93a;}
+  .code-box .cmt{color:#6a8a6a;}
+  .code-box .txt{color:#f0f0f0;}
+
+  .result-box{flex:1; min-width:220px;}
+  .result-table{width:100%; border-collapse:collapse; font-size:13px;}
+  .result-table th{
+    background:#2a4f8f; color:#fff; padding:8px 6px; border:1px solid #1c3663; text-align:center;
+  }
+  .result-table td{
+    padding:8px 6px; border:1px solid #ddd; text-align:center; color:#333;
+  }
+  .result-table tr:nth-child(even) td{background:#f7f9fc;}
+
+  .summary-box{
+    margin-top:30px; background:#fdf1f3; border-left:4px solid #EE3355;
+    border-radius:4px; padding:16px 20px;
+  }
+  .summary-box p.plain{font-size:14px;}
+  .tag-map{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;}
+  .tag-map .tm-item{
+    flex:1; min-width:180px; background:#fff; border:1px solid #f0c7cf; border-radius:6px;
+    padding:10px 12px;
+  }
+  .tag-map .tm-item b{color:#EE3355;}
+</style>
+<div class="top-bar">
+        <a class="btn-back" href="file:///C:/Users/pc/Downloads/Banklnwza/sss.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</head>
+<body>
+<div class="title-banner">
+  <h1>บทที่ 6</h1>
+  <h2>การสร้างตารางข้อมูล</h2>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. Table Structure overview -->
+  <div class="red-tag">6.1 โครงสร้างตาราง (Table Structure)</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="shelf-grid">
+        <div class="srow"><div class="scell"></div><div class="scell"></div><div class="scell"></div></div>
+        <div class="srow"><div class="scell"></div><div class="scell"></div><div class="scell"></div></div>
+        <div class="srow"><div class="scell"></div><div class="scell"></div><div class="scell"></div></div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>การนำเสนอข้อมูลแบบตารางกริด (Grid) ช่วยให้อ่านและเข้าใจง่าย</li>
+        <li>การสร้างตาราง HTML ต้องใช้แท็กทำงานร่วมกันหลายตัว</li>
+        <li>เปรียบเสมือนการสร้าง "ชั้นวางหนังสือ" ที่มีทั้งโครงตู้ ชั้น และช่องเก็บของ</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2. <table> tag -->
+  <div class="red-tag">6.1.1 การประกาศแท็กตาราง &lt;table&gt;</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="table-tag-scene">
+        <div class="code-label">&lt;table&gt; ... &lt;/table&gt;</div>
+        <div class="inner-note">ข้อมูลตาราง<br>ทั้งหมดอยู่ภายในนี้</div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>กำหนดขอบเขตตารางด้วยแท็ก &lt;table&gt;</li>
+        <li>เปรียบเสมือน "โครงตู้" หรือ "กรอบชั้นวางหนังสือ"</li>
+        <li>ข้อมูลทุกอย่างของตารางต้องอยู่ภายในคู่แท็กนี้เสมอ</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. <tr> rows -->
+  <div class="red-tag center">6.1.1.1 การสร้างแถว &lt;tr&gt;</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="tr-scene">
+        <div class="trow">&lt;tr&gt; ... &lt;/tr&gt;</div>
+        <div class="trow">&lt;tr&gt; ... &lt;/tr&gt;</div>
+        <div class="trow">&lt;tr&gt; ... &lt;/tr&gt;</div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="indent1" style="font-weight:600; font-size:16px;">
+        <li>ใช้แท็ก &lt;tr&gt; (Table Row) ซ้อนเข้าไปด้านในตาราง</li>
+        <li>แต่ละ &lt;tr&gt; คือการสร้าง "ชั้นวางแต่ละชั้น" ในแนวนอน</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. <td> columns -->
+  <div class="red-tag">การสร้างข้อมูล &lt;td&gt;</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="td-scene">
+        <div class="track">
+          <div class="box">&lt;td&gt;</div>
+          <div class="box">&lt;td&gt;</div>
+          <div class="box">&lt;td&gt;</div>
+        </div>
+        <div class="caption">ยิ่งเพิ่ม &lt;td&gt; ยิ่งเพิ่มคอลัมน์</div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>ใช้แท็ก &lt;td&gt; (Table Data) เพื่อนำ "กล่องข้อมูล" ไปวางบนชั้น</li>
+        <li>ยิ่งเพิ่มจำนวน &lt;td&gt; ในแต่ละแถว ยิ่งสร้างการแบ่งคอลัมน์ (Column) มากขึ้น</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5. <th> header -->
+  <div class="red-tag center">6.1.1.2 การสร้างส่วนหัวตาราง &lt;th&gt;</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="th-scene">
+        <div class="head-row">
+          <div class="head-cell">รหัสนักเรียน</div>
+          <div class="head-cell">ชื่อ-นามสกุล</div>
+        </div>
+        <div class="body-row">
+          <div class="body-cell">66001</div>
+          <div class="body-cell">สมชาย ใจดี</div>
+        </div>
+        <div class="a11y">
+          <div class="a11y-icon">🔊</div>
+          รองรับ Screen Reader
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>ใช้แท็ก &lt;th&gt; (Table Heading) แทน &lt;td&gt; ในแถวบนสุดที่เป็นหัวข้อ</li>
+        <li>ตัวหนาและจัดกึ่งกลางโดยอัตโนมัติ</li>
+        <li>รองรับโปรแกรมอ่านหน้าจอ (Screen Reader) สำหรับผู้พิการทางสายตา</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Example -->
+  <div class="red-tag">ตัวอย่างการปฏิบัติ: การสร้างตารางข้อมูลพื้นฐาน</div>
+  <p class="plain" style="margin-bottom:6px;">สังเกตการซ้อนกันของแท็ก &lt;table&gt;, &lt;tr&gt;, &lt;th&gt; และ &lt;td&gt; ที่เรียงเป็นลำดับชั้นอย่างเป็นระบบ</p>
+
+  <div class="example-block">
+    <div class="code-box">
+<span class="tag">&lt;table</span> <span class="attr">border</span>=<span class="txt">"1"</span><span class="tag">&gt;</span><br>
+&nbsp;&nbsp;<span class="cmt">&lt;!-- แถวที่ 1 (ส่วนหัวตาราง) --&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;tr&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;th&gt;</span>รหัสนักเรียน<span class="tag">&lt;/th&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;th&gt;</span>ชื่อ-นามสกุล<span class="tag">&lt;/th&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;th&gt;</span>เกรดเฉลี่ย<span class="tag">&lt;/th&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;/tr&gt;</span><br>
+&nbsp;&nbsp;<span class="cmt">&lt;!-- แถวที่ 2 (ข้อมูลคนที่ 1) --&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;tr&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span>66001<span class="tag">&lt;/td&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span>สมชาย ใจดี<span class="tag">&lt;/td&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;td&gt;</span>3.50<span class="tag">&lt;/td&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;/tr&gt;</span><br>
+<span class="tag">&lt;/table&gt;</span>
+    </div>
+
+    <div class="result-box">
+      <table class="result-table">
+        <tr><th>รหัสนักเรียน</th><th>ชื่อ-นามสกุล</th><th>เกรดเฉลี่ย</th></tr>
+        <tr><td>66001</td><td>สมชาย ใจดี</td><td>3.50</td></tr>
+        <tr><td>66002</td><td>สมหญิง ดีใจ</td><td>3.75</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="red-tag center" style="margin-top:34px;">สรุปเนื้อหา: โครงสร้างตาราง (Table Structure)</div>
+  <div class="summary-box">
+    <p class="plain">
+      การสร้างตารางใน HTML อาศัยแท็กที่ทำงานร่วมกันเป็นลำดับชั้น เริ่มจากแท็ก &lt;table&gt;
+      ที่กำหนดขอบเขตตารางทั้งหมด ภายในบรรจุแท็ก &lt;tr&gt; เพื่อสร้างแถวในแนวนอน
+      แต่ละแถวประกอบด้วยแท็ก &lt;td&gt; สำหรับข้อมูลทั่วไป หรือ &lt;th&gt; สำหรับส่วนหัวตาราง
+      ที่แสดงผลตัวหนา จัดกึ่งกลาง และรองรับ Screen Reader
+    </p>
+    <div class="tag-map">
+      <div class="tm-item"><b>&lt;TABLE&gt;</b> — กำหนดขอบเขตตาราง (โครงชั้นวางหนังสือ)</div>
+      <div class="tm-item"><b>&lt;TR&gt;</b> — สร้างแถวแนวนอน (ชั้นวางแต่ละชั้น)</div>
+      <div class="tm-item"><b>&lt;TH&gt;</b> — ส่วนหัวตาราง ตัวหนา กึ่งกลาง รองรับ Screen Reader</div>
+      <div class="tm-item"><b>&lt;TD&gt;</b> — ช่องข้อมูลเนื้อหาทั่วไป (กล่องเก็บข้อมูล)</div>
+    </div>
+  </div>
+</div>
+ <div class="top-bar">
+        <a class="btn-back" href="index.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</div>
+</body>
+</html>

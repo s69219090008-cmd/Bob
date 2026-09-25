@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 3 การสร้างเว็บไซต์ด้วย HTML5</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Sarabun', sans-serif;
+    background:#ffffff;
+    color:#1a1a1a;
+    line-height:1.7;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:0 40px;}
+
+  .title-banner{
+    background:#EE3355;
+    color:#fff;
+    text-align:center;
+    padding:22px 20px 26px;
+    margin-bottom:30px;
+  }
+  .title-banner h1{font-size:22px; font-weight:700; margin-bottom:4px;}
+  .title-banner h2{font-size:22px; font-weight:700;}
+
+  .red-tag{
+    background:#EE3355;
+    color:#fff;
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:4px;
+    font-size:14px;
+    font-weight:600;
+    margin:26px 0 18px;
+  }
+  .red-tag.center{display:block; width:fit-content; margin-left:auto; margin-right:auto; text-align:center;}
+  .red-tag.wide{display:block; width:100%; text-align:center;}
+  .red-tag small{display:block; font-weight:400; font-size:12.5px; margin-top:2px;}
+
+  ul{list-style:none;}
+  li{margin-bottom:6px; font-size:14.5px;}
+  li::before{content:"• "; }
+
+  code{font-family:'Courier New', monospace; background:#f4f4f4; padding:1px 5px; border-radius:3px; font-size:0.95em;}
+
+  .list-center{margin-top:10px;}
+  .list-center li{text-align:center; font-size:16px; font-weight:600; margin-bottom:26px;}
+
+  .list-center.small li{font-size:14.5px; font-weight:400;}
+
+  .row{display:flex; align-items:center; gap:30px; margin-top:16px;}
+  .row.reverse{flex-direction:row-reverse;}
+  .row .visual{flex:0 0 auto;}
+  .row .content{flex:1;}
+
+  .indent-list li{font-size:15.5px; margin-bottom:22px; text-align:center;}
+
+  /* ribbon icon */
+  .ribbon{width:220px; height:150px; position:relative; margin:0 auto;}
+  .ribbon .top{
+    position:absolute; top:0; left:20px; width:180px; height:90px;
+    background:#EE3355; clip-path:polygon(0 0, 100% 0, 100% 100%, 60% 65%, 0 100%);
+  }
+  .ribbon .fold{
+    position:absolute; top:78px; left:20px; width:60px; height:40px;
+    background:#c21f3f; clip-path:polygon(0 0, 100% 0, 50% 100%);
+  }
+
+  /* clipboard checklist icon */
+  .clipboard{width:160px; height:180px; margin:0 auto; position:relative;}
+  .clipboard svg{width:100%; height:100%;}
+
+  /* magnifier document icon */
+  .magdoc{width:150px; height:130px; margin:0 auto;}
+  .magdoc svg{width:100%; height:100%;}
+</style>
+<div class="top-bar">
+        <a class="btn-back" href="file:///C:/Users/pc/Downloads/Banklnwza/sss.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</head>
+<body>
+<div class="title-banner">
+  <h1>บทที่ 3</h1>
+  <h2>การสร้างเว็บไซต์ด้วย HTML5</h2>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. HTML5 Structure -->
+  <div class="red-tag">
+    1. โครงสร้างมาตรฐานของ HTML5
+    <small>ประกอบด้วย 3 ส่วนหลัก</small>
+  </div>
+
+  <ul class="indent-list">
+    <li><code>&lt;!DOCTYPE html&gt;</code> ประกาศว่าใช้มาตรฐาน HTML5</li>
+    <li><code>&lt;head&gt;</code> เก็บข้อมูลเบื้องหลัง เช่น ชื่อหน้าเว็บ (<code>&lt;title&gt;</code>) และการตั้งค่าต่าง ๆ</li>
+    <li><code>&lt;body&gt;</code> เป็นส่วนแสดงเนื้อหาที่ผู้ใช้มองเห็นบนหน้าเว็บ</li>
+  </ul>
+
+  <!-- 2. Tag & Attribute -->
+  <div class="red-tag">2. การใช้งาน Tag และ Attribute</div>
+
+  <p style="text-align:center; font-size:16px; font-weight:600; margin:18px 0;">Tag คือคำสั่งที่ใช้กำหนดรูปแบบและโครงสร้างของข้อมูล</p>
+
+  <div class="ribbon"><div class="top"></div><div class="fold"></div></div>
+
+  <p style="text-align:center; font-size:16px; font-weight:600; margin:24px 0;">Attribute คือคุณสมบัติเสริมที่เพิ่มรายละเอียดให้แท็ก เช่น สี ขนาด หรือลิงก์ต่าง ๆ</p>
+
+  <!-- 3. Text formatting -->
+  <div class="red-tag">3. การจัดการข้อความ</div>
+
+  <ul class="indent-list">
+    <li>ใช้แท็ก <code>&lt;h1&gt;</code> ถึง <code>&lt;h6&gt;</code> สำหรับหัวข้อ โดย <code>&lt;h1&gt;</code> สำคัญที่สุดและควรมีเพียง 1 ตัวต่อหน้าเว็บ</li>
+    <li>ใช้ <code>&lt;p&gt;</code> สำหรับย่อหน้า</li>
+    <li>ใช้ <code>&lt;br&gt;</code> เพื่อขึ้นบรรทัดใหม่ภายในข้อความ</li>
+  </ul>
+
+  <!-- 4. Lists -->
+  <div class="red-tag">4. การสร้างรายการข้อมูล (Lists)</div>
+
+  <div class="row">
+    <div class="content">
+      <ul class="indent-list">
+        <li><code>&lt;ul&gt;</code> รายการแบบไม่มีลำดับ (Bullet)</li>
+        <li><code>&lt;ol&gt;</code> รายการแบบมีลำดับ (ตัวเลขหรือตัวอักษร)</li>
+        <li><code>&lt;li&gt;</code> ใช้กำหนดแต่ละรายการ</li>
+      </ul>
+    </div>
+    <div class="visual">
+      <div class="clipboard">
+        <svg viewBox="0 0 100 110" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="12" y="10" width="60" height="88" rx="6"/>
+          <rect x="30" y="3" width="24" height="12" rx="3" fill="#111"/>
+          <line x1="24" y1="34" x2="24" y2="34"/>
+          <rect x="20" y="30" width="8" height="8"/>
+          <line x1="34" y1="34" x2="60" y2="34"/>
+          <rect x="20" y="46" width="8" height="8"/>
+          <line x1="34" y1="50" x2="60" y2="50"/>
+          <rect x="20" y="62" width="8" height="8"/>
+          <line x1="34" y1="66" x2="60" y2="66"/>
+          <circle cx="72" cy="80" r="22" fill="#fff"/>
+          <path d="M62 80 L69 87 L84 70"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="magdoc">
+    <svg viewBox="0 0 120 100" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="6" y="10" width="60" height="76" rx="4"/>
+      <line x1="18" y1="26" x2="54" y2="26"/>
+      <line x1="18" y1="36" x2="54" y2="36"/>
+      <line x1="18" y1="46" x2="42" y2="46"/>
+      <circle cx="66" cy="60" r="24" fill="#fff"/>
+      <line x1="84" y1="78" x2="100" y2="94"/>
+    </svg>
+  </div>
+
+  <!-- 5. VS Code Extensions -->
+  <div class="red-tag wide">
+    5. การใช้ Extensions ใน VS Code
+    <small>ส่วนขยายช่วยให้เขียนโค้ดได้รวดเร็วและลดข้อผิดพลาด เช่น</small>
+  </div>
+
+  <ul class="indent-list">
+    <li>Prettier จัดรูปแบบโค้ดอัตโนมัติ</li>
+    <li>Error Lens แสดงข้อผิดพลาดทันที</li>
+    <li>Auto Rename Tag เปลี่ยนชื่อแท็กเปิด-ปิดพร้อมกัน</li>
+    <li>Auto Close Tag เติมแท็กปิดอัตโนมัติ</li>
+    <li>Live Server แสดงผลเว็บไซต์แบบเรียลไทม์และจำลองการทำงานของเว็บเซิร์ฟเวอร์จริง</li>
+  </ul>
+</div>
+ <div class="top-bar">
+        <a class="btn-back" href="index.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</div>
+</body>
+</html>

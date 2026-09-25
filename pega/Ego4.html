@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 4 การจัดรูปแบบเว็บไซต์ด้วย CSS</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Sarabun', sans-serif;
+    background:#ffffff;
+    color:#1a1a1a;
+    line-height:1.7;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:0 40px;}
+
+  .title-banner{
+    background:#EE3355;
+    color:#fff;
+    text-align:center;
+    padding:22px 20px 26px;
+    margin-bottom:30px;
+  }
+  .title-banner h1{font-size:22px; font-weight:700; margin-bottom:4px;}
+  .title-banner h2{font-size:22px; font-weight:700;}
+
+  .red-tag{
+    background:#EE3355;
+    color:#fff;
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:4px;
+    font-size:14px;
+    font-weight:600;
+    margin:26px 0 18px;
+  }
+  .red-tag.center{display:block; width:fit-content; margin-left:auto; margin-right:auto; text-align:center;}
+  .red-tag.wide{display:block; width:100%; text-align:center;}
+  .red-tag small{display:block; font-weight:400; font-size:12.5px; margin-top:2px;}
+
+  ul{list-style:none;}
+  li{margin-bottom:6px; font-size:14.5px;}
+  li::before{content:"• "; }
+
+  code{font-family:'Courier New', monospace; background:#f4f4f4; padding:1px 5px; border-radius:3px; font-size:0.95em;}
+
+  .indent-list li{font-size:16px; font-weight:600; text-align:center; margin-bottom:30px;}
+  .indent-list.tight li{margin-bottom:8px; font-weight:400; font-size:15px;}
+
+  .row{display:flex; align-items:center; gap:30px; margin-top:16px;}
+  .row .visual{flex:0 0 auto;}
+  .row .content{flex:1;}
+
+  .subhead{text-align:center; font-weight:700; font-size:16px; margin:26px 0 8px;}
+
+  /* ornamental flourish divider */
+  .flourish{width:340px; height:100px; margin:20px auto;}
+  .flourish svg{width:100%; height:100%;}
+
+  /* box model diagram */
+  .boxmodel{width:260px; margin:20px auto; text-align:center;}
+  .bm-margin{background:#fce9df; border:1px dashed #d98a55; padding:22px; position:relative;}
+  .bm-margin::before{content:'Margin'; position:absolute; top:2px; left:8px; font-size:10px; color:#b06030;}
+  .bm-border{background:#fdf0c8; border:3px solid #caa23a; padding:16px; position:relative;}
+  .bm-border::before{content:'Border'; position:absolute; top:2px; left:8px; font-size:10px; color:#8a6a10;}
+  .bm-padding{background:#e2f0e0; border:1px dashed #5a9a52; padding:16px; position:relative;}
+  .bm-padding::before{content:'Padding'; position:absolute; top:2px; left:8px; font-size:10px; color:#3a6a35;}
+  .bm-content{background:#d7e8f7; border:1px solid #4a7fbf; padding:16px; font-size:12px; font-weight:600; color:#1a3a5c;}
+
+  /* people / positioning icon */
+  .peopleicon{width:70px; height:70px; margin:0 auto;}
+  .peopleicon svg{width:100%; height:100%;}
+
+  h4.section-plain{font-size:14.5px; font-weight:700; margin:8px 0 4px;}
+</style>
+<div class="top-bar">
+        <a class="btn-back" href="file:///C:/Users/pc/Downloads/Banklnwza/sss.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</head>
+<body>
+<div class="title-banner">
+  <h1>บทที่ 4</h1>
+  <h2>การจัดรูปแบบเว็บไซต์ด้วย CSS</h2>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. CSS Connection Methods -->
+  <div class="red-tag">1. วิธีการเชื่อมต่อ CSS</div>
+
+  <ul class="indent-list">
+    <li>Internal CSS : เขียน CSS ไว้ภายในไฟล์ HTML ในแท็ก <code>&lt;style&gt;</code> เหมาะกับเว็บขนาดเล็ก</li>
+    <li>External CSS : แยก CSS เป็นไฟล์ .css แล้วเชื่อมต่อด้วยแท็ก <code>&lt;link&gt;</code> เหมาะกับเว็บไซต์หลายหน้าและเป็นมาตรฐานที่นิยมใช้</li>
+  </ul>
+
+  <!-- 2. CSS Selectors -->
+  <div class="red-tag wide">
+    2. CSS Selectors
+    <small>ใช้เลือกองค์ประกอบที่ต้องการตกแต่ง</small>
+  </div>
+
+  <ul class="indent-list">
+    <li>Tag Selector เช่น h1, p</li>
+    <li>Class Selector ใช้เครื่องหมาย . เช่น .menu</li>
+    <li>ID Selector ใช้เครื่องหมาย # เช่น #header และห้ามซ้ำในหน้าเดียว</li>
+  </ul>
+
+  <div class="flourish">
+    <svg viewBox="0 0 340 100" fill="none" stroke="#d99a3a" stroke-width="3" stroke-linecap="round">
+      <path d="M170 20 C150 5, 110 5, 90 25 C70 45, 90 65, 115 55 C130 49, 130 35, 115 32"/>
+      <path d="M170 20 C190 5, 230 5, 250 25 C270 45, 250 65, 225 55 C210 49, 210 35, 225 32"/>
+      <path d="M115 32 C90 32, 60 45, 45 60 C35 70, 40 82, 55 78"/>
+      <path d="M225 32 C250 32, 280 45, 295 60 C305 70, 300 82, 285 78"/>
+      <path d="M170 20 L170 75" stroke-width="3"/>
+      <circle cx="170" cy="18" r="4" fill="#d99a3a" stroke="none"/>
+      <circle cx="158" cy="25" r="2.5" fill="#d99a3a" stroke="none"/>
+      <circle cx="182" cy="25" r="2.5" fill="#d99a3a" stroke="none"/>
+    </svg>
+  </div>
+
+  <!-- 3. Box Model -->
+  <div class="red-tag wide">
+    3. ระบบ Box Model
+    <small>องค์ประกอบทุกชิ้นบนเว็บถูกมองเป็น "กล่อง" ประกอบด้วย</small>
+  </div>
+
+  <div class="row">
+    <div class="content">
+      <ul class="indent-list">
+        <li>Content เนื้อหาภายใน</li>
+        <li>Padding ระยะห่างภายในกล่อง</li>
+        <li>Border เส้นขอบกล่อง</li>
+        <li>Margin ระยะห่างภายนอกกล่อง</li>
+        <li>Width / Height กำหนดขนาดความกว้างและความสูงของกล่อง</li>
+      </ul>
+    </div>
+    <div class="visual">
+      <div class="boxmodel">
+        <div class="bm-margin">
+          <div class="bm-border">
+            <div class="bm-padding">
+              <div class="bm-content">Content</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Layout Positioning -->
+  <div class="red-tag wide">
+    4. การจัดตำแหน่ง (Layout Positioning)
+    <small>Display</small>
+  </div>
+
+  <div class="peopleicon">
+    <svg viewBox="0 0 70 70" fill="#111">
+      <circle cx="35" cy="16" r="9"/>
+      <path d="M20 55 C20 38, 50 38, 50 55 L50 62 L20 62 Z"/>
+      <path d="M10 35 A25 25 0 0 1 15 20" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+      <path d="M60 35 A25 25 0 0 0 55 20" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <ul class="indent-list tight">
+    <li>block แสดงเต็มบรรทัด</li>
+    <li>inline แสดงต่อกันในบรรทัดเดียว</li>
+    <li>flex จัดวางองค์ประกอบได้ยืดหยุ่นและเป็นระเบียบ</li>
+  </ul>
+
+  <p class="subhead">Position</p>
+
+  <ul class="indent-list tight">
+    <li>relative เลื่อนจากตำแหน่งเดิม</li>
+    <li>absolute กำหนดตำแหน่งอิสระภายในกล่องแม่</li>
+    <li>fixed ยึดติดกับหน้าจอแม้เลื่อนหน้าเว็บ</li>
+  </ul>
+</div>
+ <div class="top-bar">
+        <a class="btn-back" href="index.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</div>
+</body>
+</html>

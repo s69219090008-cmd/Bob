@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>แนะนำตัว — พีรพัฒน์ องค์นาม</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chonburi&family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12201B;
+    --bg-soft: #182922;
+    --card: #1E332A;
+    --line: #2E4A3D;
+    --text: #F1ECDE;
+    --text-muted: #A9BDAF;
+    --accent: #E8A33D;
+    --accent-soft: #3F5B4C;
+    --mint: #6FBFA4;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Mitr', sans-serif;
+    font-weight: 300;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: var(--accent); }
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--mint);
+    outline-offset: 3px;
+  }
+
+  .top-bar{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(18,32,27,0.9);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 24px;
+  }
+
+  .btn-back{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+  }
+  .btn-back:hover{ color: var(--accent); }
+  .btn-back::before{
+    content: "←";
+    font-size: 1.1rem;
+  }
+
+  .wrap{
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding: 72px 0 48px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero .eyebrow{
+    color: var(--mint);
+    font-size: 0.95rem;
+    margin: 0 0 10px;
+  }
+
+  .hero h1{
+    font-family: 'Chonburi', cursive;
+    font-size: clamp(2rem, 6vw, 3rem);
+    line-height: 1.3;
+    margin: 0 0 14px;
+    color: var(--text);
+  }
+
+  .hero .age{
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    margin: 0 0 22px;
+  }
+
+  .slogan{
+    display: inline-block;
+    padding: 8px 22px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 999px;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+  }
+
+  /* ---------- Sections ---------- */
+  section{
+    padding: 48px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  section:last-of-type{ border-bottom: none; }
+
+  section h2{
+    font-family: 'Chonburi', cursive;
+    font-weight: 400;
+    font-size: 1.4rem;
+    color: var(--mint);
+    margin: 0 0 20px;
+  }
+
+  .about p{
+    font-size: 1.1rem;
+    color: var(--text);
+    max-width: 62ch;
+  }
+
+  .skills-grid{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px;
+  }
+
+  .skills-grid li{
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 0.98rem;
+  }
+
+  .goals{
+    counter-reset: goal;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  .goals li{
+    counter-increment: goal;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--bg-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    font-size: 1.05rem;
+  }
+
+  .goals li::before{
+    content: counter(goal);
+    font-family: 'Chonburi', cursive;
+    font-size: 1.3rem;
+    color: var(--accent);
+    min-width: 1.2em;
+  }
+
+  .media-frame{
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    overflow: hidden;
+    background: #000;
+  }
+
+  video, iframe{
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    border: 0;
+  }
+
+  .note{
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+  }
+
+  figure{ margin: 0; }
+  figure img{
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+  }
+  figcaption{
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 8px;
+  }
+
+  /* ---------- Contact / Footer ---------- */
+  footer{
+    padding: 48px 0 72px;
+    text-align: center;
+  }
+
+  footer h2{
+    font-family: 'Chonburi', cursive;
+    font-weight: 400;
+    color: var(--mint);
+    font-size: 1.4rem;
+    margin: 0 0 18px;
+  }
+
+  .contact-line{
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 1.05rem;
+    color: var(--text);
+    margin: 6px 0;
+  }
+  .contact-line .label{ color: var(--text-muted); }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <a class="btn-back" href="../index.html">กลับหน้าหลัก</a>
+  </div>
+
+  <div class="wrap">
+
+    <section class="hero">
+      <p class="eyebrow">แนะนำตัว</p>
+      <h1>นายพีรพัฒน์ องค์นาม</h1>
+      <p class="age">อายุ 16 ปี</p>
+      <span class="slogan">noob</span>
+    </section>
+
+    <section class="about">
+      <h2>เล่าเรื่องราวเกี่ยวกับตัวเอง</h2>
+      <p>ผมไม่ชอบlesbian</p>
+    </section>
+
+    <section class="skills">
+      <h2>ทักษะหรือความสนใจ</h2>
+      <ul class="skills-grid">
+        <li>ทำอาหารเป็น</li>
+        <li>ตัดต่อรูปได้เล็กน้อย</li>
+        <li>สนใจการตัดต่อ</li>
+      </ul>
+
+      <ol class="goals">
+        <li>เป็นเจ้าของเว็บขายของ</li>
+        <li>เป็นคนรวย</li>
+      </ol>
+    </section>
+
+    <section class="video-section">
+      <h2>วิดีโอ</h2>
+      <div class="media-frame">
+        <video src="../videos/ff.mp4" controls>
+          ขออภัย เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ HTML5
+        </video>
+      </div>
+    </section>
+
+    <section class="photo-section">
+      <h2>รูปภาพ</h2>
+      <p class="note">ให้นักศึกษาสังเกตการแสดงผลของรูปภาพด้านล่างนี้</p>
+      <figure>
+        <img src="../pic/gg.jpg" alt="คำอธิบายรูปภาพกรณีโหลดไม่ขึ้น">
+      </figure>
+    </section>
+
+    <section class="map-section">
+      <h2>แผนที่</h2>
+      <div class="media-frame">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!4v1783396537320!6m8!1m7!1saeI9FyFEkceDRoYvZx5dJg!2m2!1d16.5249273224423!2d102.9417280583416!3f152.93374921683989!4f-36.46673918869128!5f0.7820865974627469"
+          allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+    </section>
+
+    <footer>
+      <h2>ติดต่อได้ที่</h2>
+      <p class="contact-line"><span class="label">เบอร์:</span> 081-009-2751</p>
+      <p class="contact-line"><span class="label">email:</span> aphichatongnam2514@gmail.com</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>

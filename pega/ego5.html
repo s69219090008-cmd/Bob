@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 5 การจัดการข้อความและสื่อมัลติมีเดีย</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Sarabun', sans-serif;
+    background:#ffffff;
+    color:#1a1a1a;
+    line-height:1.7;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:0 40px;}
+
+  .title-banner{
+    background:#EE3355;
+    color:#fff;
+    text-align:center;
+    padding:22px 20px 26px;
+    margin-bottom:30px;
+  }
+  .title-banner h1{font-size:22px; font-weight:700; margin-bottom:4px;}
+  .title-banner h2{font-size:22px; font-weight:700;}
+
+  .red-tag{
+    background:#EE3355;
+    color:#fff;
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:4px;
+    font-size:14px;
+    font-weight:600;
+    margin:26px 0 18px;
+  }
+  .red-tag.center{display:block; width:fit-content; margin-left:auto; margin-right:auto; text-align:center;}
+
+  ul{list-style:none;}
+  .indent1{margin-left:20px;}
+  li{margin-bottom:6px; font-size:14.5px;}
+  li::before{content:"• "; }
+
+  p.plain{margin:6px 0; font-size:14.5px;}
+
+  .list-center li{text-align:center; font-size:14.5px; margin-bottom:10px;}
+  .list-center{margin-top:10px;}
+
+  .row{display:flex; align-items:flex-start; gap:30px; margin-top:10px;}
+  .row .visual{flex:0 0 auto;}
+  .row .content{flex:1;}
+
+  /* 1. text styling sample */
+  .text-card{
+    width:190px; border:1px solid #ddd; border-radius:8px; padding:16px 14px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.08); text-align:center;
+  }
+  .text-card .css-line{font-family:'Courier New',monospace; font-size:11px; color:#8a8a8a; text-align:left; margin-bottom:8px;}
+  .text-card .sample-big{font-size:34px; font-weight:700; color:#EE3355;}
+  .text-card .sample-mid{font-size:18px; font-weight:600; color:#2a4f8f; margin-top:4px;}
+  .text-card .sample-small{font-size:12px; color:#3fa14a; margin-top:4px;}
+  .swatches{display:flex; justify-content:center; gap:6px; margin-top:12px;}
+  .swatch{width:18px; height:18px; border-radius:50%;}
+  .sw1{background:#EE3355;} .sw2{background:#2a4f8f;} .sw3{background:#3fa14a;} .sw4{background:#e0c93a;}
+
+  /* 2. image/path signpost */
+  .img-scene{width:190px; display:flex; flex-direction:column; align-items:center; gap:10px;}
+  .img-frame{
+    width:150px; height:100px; border:3px solid #2a4f8f; border-radius:6px;
+    background:linear-gradient(135deg,#bcd4f0 25%,#8fb4e8 25%,#8fb4e8 50%,#bcd4f0 50%,#bcd4f0 75%,#8fb4e8 75%);
+    background-size:20px 20px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700; color:#fff; text-shadow:0 1px 2px rgba(0,0,0,0.4);
+  }
+  .path-signs{display:flex; flex-direction:column; gap:6px; width:100%;}
+  .path-sign{
+    font-size:10.5px; font-weight:600; color:#fff; border-radius:3px; padding:5px 8px; text-align:center;
+  }
+  .path-sign.abs{background:#e0602a;}
+  .path-sign.rel{background:#3fa14a;}
+
+  /* 3. video player mockup */
+  .video-card{width:190px;}
+  .video-screen{
+    width:100%; height:104px; background:#1a2440; border-radius:6px 6px 0 0;
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .play-btn{
+    width:0; height:0;
+    border-top:14px solid transparent; border-bottom:14px solid transparent;
+    border-left:22px solid #fff; margin-left:6px; opacity:0.9;
+  }
+  .video-controls{
+    background:#2a2f45; border-radius:0 0 6px 6px; padding:8px 10px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .video-controls .dot{width:9px; height:9px; border-radius:50%; background:#8fb4e8;}
+  .video-controls .bar{flex:1; height:4px; background:#4a5480; border-radius:2px; position:relative;}
+  .video-controls .bar::after{content:''; position:absolute; left:0; top:0; height:100%; width:40%; background:#EE3355; border-radius:2px;}
+  .video-controls .vol{font-size:11px; color:#bcd4f0;}
+
+  /* 4. iframe window-in-window */
+  .iframe-scene{
+    width:190px; height:150px; border:3px solid #333; border-radius:6px;
+    background:#f4f6fb; position:relative; padding:14px; display:flex; align-items:center; justify-content:center;
+  }
+  .iframe-inner{
+    width:100%; height:100%; border:2px dashed #EE3355; border-radius:5px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    background:#fff;
+  }
+  .iframe-inner .icon-row{display:flex; gap:10px;}
+  .yt-icon{
+    width:30px; height:20px; background:#e0302a; border-radius:5px; position:relative;
+  }
+  .yt-icon::after{
+    content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:8px solid #fff;
+  }
+  .map-icon{
+    width:24px; height:24px; border-radius:50% 50% 50% 0; background:#3fa14a; transform:rotate(-45deg);
+  }
+  .iframe-inner .label{font-size:10px; color:#888; margin-top:2px;}
+
+  h4.section-plain{font-size:14.5px; font-weight:700; margin:8px 0 4px;}
+
+  .summary-box{
+    margin-top:30px; background:#fdf1f3; border-left:4px solid #EE3355;
+    border-radius:4px; padding:16px 20px;
+  }
+  .summary-box p.plain{font-size:14px;}
+</style>
+<div class="top-bar">
+        <a class="btn-back" href="file:///C:/Users/pc/Downloads/Banklnwza/sss.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</head>
+<body>
+<div class="title-banner">
+  <h1>บทที่ 5</h1>
+  <h2>การจัดการข้อความและสื่อมัลติมีเดีย</h2>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. Advanced Text -->
+  <div class="red-tag">5.1 การจัดการข้อความระดับสูง</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="text-card">
+        <div class="css-line">color / font-size</div>
+        <div class="sample-big">Aa</div>
+        <div class="sample-mid">Aa</div>
+        <div class="sample-small">Aa</div>
+        <div class="swatches">
+          <div class="swatch sw1"></div>
+          <div class="swatch sw2"></div>
+          <div class="swatch sw3"></div>
+          <div class="swatch sw4"></div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>ใช้คำสั่ง <b>color</b> กำหนดสีข้อความ (ชื่อสี, Hex Code, RGB)</li>
+        <li>ใช้คำสั่ง <b>font-size</b> กำหนดขนาดตัวอักษร (นิยมหน่วยพิกเซล px)</li>
+        <li>ควรออกแบบตาม Visual Hierarchy หัวข้อใหญ่ เนื้อหาเล็กแต่อ่านง่าย</li>
+        <li>เชื่อมต่อ <b>Google Fonts</b> ผ่านแท็ก &lt;link&gt; แล้วเรียกใช้ด้วย font-family</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2. Images & Media -->
+  <div class="red-tag">5.2 การแทรกรูปภาพและสื่อ</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="img-scene">
+        <div class="img-frame">&lt;img src=""&gt;</div>
+        <div class="path-signs">
+          <div class="path-sign abs">Absolute Path https://...</div>
+          <div class="path-sign rel">Relative Path images/...</div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>ใช้แท็กเดี่ยว &lt;img&gt; คู่กับแอตทริบิวต์ src เพื่อระบุที่อยู่ไฟล์ภาพ</li>
+        <li>Absolute Path : ชี้ไปยังรูปภาพบนเว็บไซต์อื่น (ขึ้นต้นด้วย http/https)</li>
+        <li>Relative Path : อ้างอิงจากโฟลเดอร์โปรเจกต์ตัวเอง เป็นมาตรฐานมืออาชีพ</li>
+        <li>ควรบีบอัด/ย่อขนาดภาพ (Image Optimization) เพื่อให้เว็บโหลดเร็วและ SEO ดี</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. Video & Audio -->
+  <div class="red-tag center">5.3 การจัดการวิดีโอและเสียง</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="video-card">
+        <div class="video-screen"><div class="play-btn"></div></div>
+        <div class="video-controls">
+          <div class="dot"></div>
+          <div class="bar"></div>
+          <div class="vol">🔊</div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="indent1" style="font-weight:600; font-size:16px;">
+        <li>แท็ก &lt;video&gt; สำหรับวิดีโอ และ &lt;audio&gt; สำหรับเสียง</li>
+        <li>ต้องมีแอตทริบิวต์ src ระบุไฟล์ (เช่น .mp4)</li>
+        <li>แอตทริบิวต์ controls คือหัวใจสำคัญ ทำให้เกิดแผงควบคุมเล่น/หยุด</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. Iframe -->
+  <div class="red-tag">5.4 การสร้างเฟรมด้วย Inline Frame (Iframe)</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="iframe-scene">
+        <div class="iframe-inner">
+          <div class="icon-row">
+            <div class="yt-icon"></div>
+            <div class="map-icon"></div>
+          </div>
+          <div class="label">&lt;iframe src=""&gt;</div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>&lt;iframe&gt; ใช้ "เจาะหน้าต่าง" ดึงหน้าเว็บอื่นมาแสดงในเว็บของเรา</li>
+        <li>src : URL ปลายทาง (ต้องเป็น Absolute Path https://)</li>
+        <li>width / height : กำหนดขนาดกรอบเฟรม</li>
+        <li>title : คำอธิบายเฟรม สำคัญต่อ Screen Reader</li>
+        <li>allowfullscreen : อนุญาตให้ขยายเต็มจอ</li>
+        <li>นิยมใช้ฝังวิดีโอ YouTube และแผนที่ Google Maps</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="red-tag center">สรุปท้ายบท</div>
+  <div class="summary-box">
+    <p class="plain">
+      บทนี้เชื่อมโยงการตกแต่งข้อความด้วย CSS และ Google Fonts เข้ากับการแทรกสื่อมัลติมีเดีย
+      ทั้งรูปภาพ (&lt;img&gt; + src), วิดีโอ/เสียง (&lt;video&gt;/&lt;audio&gt; + controls)
+      และการฝังเนื้อหาจากภายนอกด้วย &lt;iframe&gt; ทำให้เว็บไซต์ดูเป็นมืออาชีพ โหลดเร็ว
+      และมีปฏิสัมพันธ์กับผู้ใช้งานได้ดียิ่งขึ้น ก่อนก้าวเข้าสู่บทถัดไปเรื่อง
+      "การสร้างตารางข้อมูล (Tables)"
+    </p>
+  </div>
+</div>
+ <div class="top-bar">
+        <a class="btn-back" href="index.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</div>
+</body>
+</html>

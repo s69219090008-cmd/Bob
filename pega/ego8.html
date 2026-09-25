@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 8 การออกแบบและสร้างฟอร์ม (Forms)</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Sarabun', sans-serif;
+    background:#ffffff;
+    color:#1a1a1a;
+    line-height:1.7;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:0 40px;}
+
+  .title-banner{
+    background:#EE3355;
+    color:#fff;
+    text-align:center;
+    padding:22px 20px 26px;
+    margin-bottom:30px;
+  }
+  .title-banner h1{font-size:22px; font-weight:700; margin-bottom:4px;}
+  .title-banner h2{font-size:22px; font-weight:700;}
+
+  .red-tag{
+    background:#EE3355;
+    color:#fff;
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:4px;
+    font-size:14px;
+    font-weight:600;
+    margin:26px 0 18px;
+  }
+  .red-tag.center{display:block; width:fit-content; margin-left:auto; margin-right:auto; text-align:center;}
+
+  ul{list-style:none;}
+  .indent1{margin-left:20px;}
+  li{margin-bottom:6px; font-size:14.5px;}
+  li::before{content:"• "; }
+
+  p.plain{margin:6px 0; font-size:14.5px;}
+
+  .list-center li{text-align:center; font-size:14.5px; margin-bottom:10px;}
+  .list-center{margin-top:10px;}
+
+  .row{display:flex; align-items:flex-start; gap:30px; margin-top:10px;}
+  .row .visual{flex:0 0 auto;}
+  .row .content{flex:1;}
+
+  h4.section-plain{font-size:14.5px; font-weight:700; margin:8px 0 4px;}
+
+  /* 1. form envelope / action-method scene */
+  .form-scene{width:210px; display:flex; flex-direction:column; gap:16px; align-items:center;}
+  .envelope{
+    width:150px; height:100px; background:#eaf1fd; border:2px solid #2a5db0; border-radius:6px;
+    position:relative; display:flex; align-items:center; justify-content:center;
+  }
+  .envelope::before{
+    content:''; position:absolute; top:0; left:0; width:0; height:0;
+    border-left:75px solid transparent; border-right:75px solid transparent; border-top:50px solid #cfe0fa;
+  }
+  .envelope .tag{
+    position:relative; z-index:1; font-size:11px; font-weight:700; color:#2a5db0; text-align:center;
+  }
+  .method-pair{display:flex; gap:10px;}
+  .method-chip{
+    border-radius:20px; padding:7px 14px; font-size:12px; font-weight:700; text-align:center; color:#fff;
+  }
+  .method-chip.get{background:#3fa14a;}
+  .method-chip.post{background:#e0602a;}
+
+  /* 2. input types scene */
+  .input-scene{width:210px; display:flex; flex-direction:column; gap:12px;}
+  .fake-input{
+    width:100%; border:2px solid #2a5db0; border-radius:5px; padding:7px 10px;
+    font-size:11.5px; color:#555; background:#fafcff;
+  }
+  .fake-input.pw{letter-spacing:3px; color:#333; font-weight:700;}
+  .choice-row{display:flex; align-items:center; gap:8px; font-size:11.5px; color:#333;}
+  .radio-dot{width:14px; height:14px; border-radius:50%; border:2px solid #7a3fc2; flex:0 0 auto; display:flex; align-items:center; justify-content:center;}
+  .radio-dot.on::after{content:''; width:6px; height:6px; border-radius:50%; background:#7a3fc2;}
+  .check-box{width:14px; height:14px; border-radius:3px; border:2px solid #3fa14a; flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-size:10px; color:#3fa14a; font-weight:700;}
+  .select-box{
+    width:100%; border:2px solid #e0602a; border-radius:5px; padding:7px 10px;
+    font-size:11.5px; color:#555; background:#fff9f6; display:flex; justify-content:space-between; align-items:center;
+  }
+
+  /* 3. validation scene */
+  .valid-scene{width:210px; display:flex; flex-direction:column; gap:14px; align-items:center;}
+  .gate{
+    width:170px; border:2px dashed #EE3355; border-radius:8px; padding:12px 14px;
+    background:#fdf1f3; text-align:center; font-size:11.5px; color:#c81f42; font-weight:600;
+  }
+  .attr-chip{
+    border-radius:20px; padding:7px 14px; font-size:12px; font-weight:700; text-align:center; color:#fff;
+    background:#EE3355; width:fit-content;
+  }
+  .attr-row{display:flex; gap:8px; flex-wrap:wrap; justify-content:center;}
+
+  /* example code + button demo */
+  .example-block{display:flex; gap:24px; flex-wrap:wrap; margin-top:16px;}
+  .code-box{
+    flex:1; min-width:260px; background:#1e1e2e; border-radius:8px; padding:16px 18px;
+    font-family:'Courier New',monospace; font-size:12px; color:#d6d6e0; overflow-x:auto;
+  }
+  .code-box .tag{color:#8fb4e8;}
+  .code-box .attr{color:#e0c93a;}
+  .code-box .txt{color:#f0f0f0;}
+  .code-box .cmt{color:#6a8a6a;}
+
+  .result-box{
+    flex:1; min-width:220px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+    background:#fafafa; border:1px dashed #ddd; border-radius:8px; padding:20px;
+  }
+  .demo-label{font-size:12px; color:#555; align-self:flex-start;}
+  .demo-input{
+    width:100%; border:1px solid #ccc; border-radius:5px; padding:8px 10px; font-size:13px; color:#333;
+  }
+  .demo-btn{
+    display:inline-block; padding:10px 24px; background:#EE3355; color:#fff;
+    border:none; border-radius:30px; font-weight:700; font-size:13px; text-decoration:none;
+    box-shadow:0 3px 8px rgba(238,51,85,0.35); align-self:flex-end; cursor:pointer;
+  }
+
+  .summary-box{
+    margin-top:30px; background:#fdf1f3; border-left:4px solid #EE3355;
+    border-radius:4px; padding:16px 20px;
+  }
+  .summary-box p.plain{font-size:14px;}
+</style>
+<div class="top-bar">
+        <a class="btn-back" href="file:///C:/Users/pc/Downloads/Banklnwza/sss.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</head>
+<body>
+<div class="title-banner">
+  <h1>บทที่ 8</h1>
+  <h2>การออกแบบและสร้างฟอร์ม (Forms)</h2>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. Form Elements -->
+  <div class="red-tag">8.1 องค์ประกอบของฟอร์ม</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="form-scene">
+        <div class="envelope">
+          <div class="tag">&lt;form&gt;<br>action="..."</div>
+        </div>
+        <div class="method-pair">
+          <div class="method-chip get">GET</div>
+          <div class="method-chip post">POST</div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>ใช้แท็กคู่ &lt;form&gt; เป็น "ซองจดหมาย" บรรจุช่องกรอกข้อมูลทั้งหมด</li>
+        <li>action : ระบุ URL ปลายทางที่จะรับข้อมูลไปประมวลผล</li>
+        <li>method="GET" : ส่งข้อมูลแนบท้าย URL เห็นได้ชัดเจน เหมาะกับข้อมูลทั่วไป</li>
+        <li>method="POST" : ซ่อนข้อมูลไว้เบื้องหลัง เหมาะกับข้อมูลส่วนตัว/รหัสผ่าน</li>
+        <li>จับคู่ &lt;label for="..."&gt; กับ &lt;input id="..."&gt; เพื่อคลิกป้ายแล้วเคอร์เซอร์กระโดดเข้าช่องกรอกทันที</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2. Input Types -->
+  <div class="red-tag center">8.2 ประเภทของ Input</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="input-scene">
+        <div class="fake-input">Text : ชื่อ-นามสกุล</div>
+        <div class="fake-input pw">Password : • • • • • •</div>
+        <div class="fake-input">Email : name@mail.com</div>
+        <div class="choice-row"><div class="radio-dot on"></div> Radio : เลือกได้ข้อเดียว</div>
+        <div class="choice-row"><div class="check-box">✓</div> Checkbox : เลือกได้หลายข้อ</div>
+        <div class="select-box">Select : จังหวัด ▾</div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="indent1" style="font-weight:600; font-size:15px;">
+        <li>Text / Password / Email : ช่องกรอกข้อความ เปลี่ยนพฤติกรรมตามค่า type</li>
+        <li>Radio : บังคับเลือกได้เพียงข้อเดียว เหมาะกับคำถามคำตอบเดียว เช่น เพศ</li>
+        <li>Checkbox : เลือกได้หลายข้อหรือไม่เลือกเลยก็ได้ เช่น งานอดิเรก</li>
+        <li>Select/Option : เมนูแบบเลื่อนลง เหมาะกับตัวเลือกจำนวนมาก ช่วยประหยัดพื้นที่</li>
+        <li>เลือกประเภทให้ถูกฝาถูกตัว ช่วยลด Human Error และเพิ่มความถูกต้องของข้อมูล</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. Validation -->
+  <div class="red-tag">8.3 การตรวจสอบข้อมูล (Validation)</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="valid-scene">
+        <div class="gate">🚫 ข้อมูลไม่ผ่านเงื่อนไข<br>ระงับการส่งฟอร์ม</div>
+        <div class="attr-row">
+          <div class="attr-chip">required</div>
+          <div class="attr-chip">min</div>
+          <div class="attr-chip">max</div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>required — บังคับกรอกข้อมูล ห้ามเว้นว่าง เหมือนดอกจันสีแดง (*)</li>
+        <li>min / max — กำหนดขอบเขตต่ำสุด-สูงสุด ใช้กับตัวเลขหรือวันที่</li>
+        <li>HTML5 มีระบบ Built-in Form Validation ตรวจสอบอัตโนมัติในตัวเบราว์เซอร์</li>
+        <li>หากข้อมูลผิดเงื่อนไข ระบบจะไม่ยอมส่งฟอร์มและแจ้งเตือนผู้ใช้งานทันที</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Example -->
+  <div class="red-tag center">ตัวอย่างการปฏิบัติ: สร้างฟอร์มที่เชื่อมโยง label กับ input พร้อม Validation</div>
+  <p class="plain" style="margin-bottom:6px; text-align:center;">ใช้ &lt;label for&gt; คู่กับ &lt;input id&gt; และเติมแอตทริบิวต์ required เพื่อบังคับกรอกข้อมูลก่อนส่งฟอร์ม</p>
+
+  <div class="example-block">
+    <div class="code-box">
+<span class="tag">&lt;form</span> <span class="attr">action</span>=<span class="txt">"submit.php"</span> <span class="attr">method</span>=<span class="txt">"post"</span><span class="tag">&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="txt">"uname"</span><span class="tag">&gt;</span>ชื่อผู้ใช้:<span class="tag">&lt;/label&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="txt">"text"</span> <span class="attr">id</span>=<span class="txt">"uname"</span> <span class="attr">required</span><span class="tag">&gt;</span><br><br>
+&nbsp;&nbsp;<span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="txt">"age"</span><span class="tag">&gt;</span>อายุ:<span class="tag">&lt;/label&gt;</span><br>
+&nbsp;&nbsp;<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="txt">"number"</span> <span class="attr">id</span>=<span class="txt">"age"</span> <span class="attr">min</span>=<span class="txt">"18"</span> <span class="attr">max</span>=<span class="txt">"60"</span><span class="tag">&gt;</span><br><br>
+&nbsp;&nbsp;<span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="txt">"submit"</span><span class="tag">&gt;</span>ส่งข้อมูล<span class="tag">&lt;/button&gt;</span><br>
+<span class="tag">&lt;/form&gt;</span>
+    </div>
+
+    <div class="result-box">
+      <label class="demo-label" for="demoUname">ชื่อผู้ใช้:</label>
+      <input class="demo-input" id="demoUname" type="text" placeholder="กรอกชื่อผู้ใช้...">
+      <label class="demo-label" for="demoAge">อายุ:</label>
+      <input class="demo-input" id="demoAge" type="number" placeholder="18 - 60">
+      <button class="demo-btn" type="button">ส่งข้อมูล</button>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="red-tag center" style="margin-top:34px;">สรุปท้ายบท</div>
+  <div class="summary-box">
+    <p class="plain">
+      บทนี้ว่าด้วยการออกแบบและสร้างฟอร์ม (Forms) ซึ่งเปลี่ยนเว็บไซต์จากการสื่อสารทางเดียวให้กลายเป็น
+      การสื่อสารสองทาง (Two-way Communication) โดยใช้แท็ก &lt;form&gt; เป็นพื้นที่บรรจุข้อมูล
+      พร้อมแอตทริบิวต์ action และ method (GET/POST) เป็นตัวกำหนดปลายทางและวิธีจัดส่งข้อมูล
+      จากนั้นใช้แท็ก &lt;input&gt; ร่วมกับ &lt;label&gt; ในการรับข้อมูลหลากหลายรูปแบบ ทั้งกลุ่มข้อความ
+      (Text, Password, Email) และกลุ่มตัวเลือก (Radio, Checkbox, Select) สุดท้ายใช้ระบบตรวจสอบข้อมูล
+      อัตโนมัติของ HTML5 (Built-in Form Validation) ผ่านแอตทริบิวต์ required, min และ max
+      เพื่อดักจับและป้องกันข้อมูลผิดพลาดก่อนส่งออกไปยังเซิร์ฟเวอร์
+      ก่อนก้าวเข้าสู่บทถัดไปเรื่อง "ภาษา JavaScript"
+    </p>
+  </div>
+</div>
+ <div class="top-bar">
+        <a class="btn-back" href="index.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</div>
+</body>
+</html>

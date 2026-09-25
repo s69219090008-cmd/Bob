@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 7 ระบบการเชื่อมโยง (Hyperlinks)</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Sarabun', sans-serif;
+    background:#ffffff;
+    color:#1a1a1a;
+    line-height:1.7;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:0 40px;}
+
+  .title-banner{
+    background:#EE3355;
+    color:#fff;
+    text-align:center;
+    padding:22px 20px 26px;
+    margin-bottom:30px;
+  }
+  .title-banner h1{font-size:22px; font-weight:700; margin-bottom:4px;}
+  .title-banner h2{font-size:22px; font-weight:700;}
+
+  .red-tag{
+    background:#EE3355;
+    color:#fff;
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:4px;
+    font-size:14px;
+    font-weight:600;
+    margin:26px 0 18px;
+  }
+  .red-tag.center{display:block; width:fit-content; margin-left:auto; margin-right:auto; text-align:center;}
+
+  ul{list-style:none;}
+  .indent1{margin-left:20px;}
+  li{margin-bottom:6px; font-size:14.5px;}
+  li::before{content:"• "; }
+
+  p.plain{margin:6px 0; font-size:14.5px;}
+
+  .list-center li{text-align:center; font-size:14.5px; margin-bottom:10px;}
+  .list-center{margin-top:10px;}
+
+  .row{display:flex; align-items:flex-start; gap:30px; margin-top:10px;}
+  .row .visual{flex:0 0 auto;}
+  .row .content{flex:1;}
+
+  h4.section-plain{font-size:14.5px; font-weight:700; margin:8px 0 4px;}
+
+  /* 1. internal / external link scene */
+  .link-scene{width:200px; display:flex; flex-direction:column; gap:16px;}
+  .door-pair{display:flex; align-items:center; justify-content:center; gap:8px;}
+  .door{
+    width:46px; height:64px; background:#8fb4e8; border:2px solid #2a4f8f; border-radius:6px 6px 3px 3px;
+    display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; font-weight:700;
+  }
+  .door-arrow{font-size:20px; color:#2a4f8f;}
+  .path-tag{
+    text-align:center; font-size:10.5px; font-weight:600; color:#fff;
+    background:#3fa14a; border-radius:12px; padding:4px 10px; width:fit-content; margin:0 auto;
+  }
+  .earth-scene{display:flex; align-items:center; justify-content:center; gap:10px;}
+  .earth{
+    width:46px; height:46px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #6fd6c9, #2aa6a0 60%, #1c7a75);
+    position:relative;
+  }
+  .earth::after{
+    content:''; position:absolute; top:8px; left:22px; width:14px; height:10px; background:#3fbf5e; border-radius:50%;
+  }
+  .plane{font-size:26px; color:#e0602a;}
+  .path-tag.ext{background:#e0602a;}
+
+  /* 2. target blank + anchor link */
+  .tech-scene{width:200px; display:flex; flex-direction:column; gap:18px; align-items:center;}
+  .tabs-mock{
+    width:170px; border:2px solid #333; border-radius:6px 6px 0 0; overflow:hidden;
+  }
+  .tabs-bar{display:flex; background:#e6e6e6;}
+  .tab{
+    flex:1; text-align:center; font-size:9.5px; padding:5px 2px; border-right:1px solid #ccc; color:#555;
+  }
+  .tab.new{background:#fff; font-weight:700; color:#EE3355;}
+  .tabs-body{height:44px; background:#fafafa; display:flex; align-items:center; justify-content:center; font-size:10px; color:#999;}
+
+  .elevator{
+    width:110px; display:flex; flex-direction:column; align-items:center; gap:4px;
+  }
+  .elevator .shaft{
+    width:26px; height:80px; background:#dfe6f2; border:2px solid #2a4f8f; border-radius:4px;
+    display:flex; flex-direction:column; justify-content:flex-end; align-items:center; position:relative;
+  }
+  .elevator .car{
+    width:20px; height:20px; background:#2a4f8f; border-radius:3px; margin-bottom:4px;
+  }
+  .elevator .down-arrow{font-size:16px; color:#2a4f8f;}
+  .elevator .label{font-size:10px; color:#555; text-align:center;}
+
+  /* 3. link states */
+  .states-scene{width:200px; display:flex; flex-direction:column; gap:10px;}
+  .state-chip{
+    border-radius:20px; padding:9px 14px; font-size:12px; font-weight:700; text-align:center;
+  }
+  .state-chip.link{background:#eaf1fd; color:#2a5db0; border:2px solid #2a5db0;}
+  .state-chip.visited{background:#f3ecfb; color:#7a3fc2; border:2px solid #7a3fc2; text-decoration:none;}
+  .state-chip.hover{background:#2a5db0; color:#fff; text-decoration:underline;}
+  .state-chip.active{background:#1c3f80; color:#fff; transform:scale(0.96); box-shadow:inset 0 2px 4px rgba(0,0,0,0.3);}
+
+  /* example code + button demo */
+  .example-block{display:flex; gap:24px; flex-wrap:wrap; margin-top:16px;}
+  .code-box{
+    flex:1; min-width:260px; background:#1e1e2e; border-radius:8px; padding:16px 18px;
+    font-family:'Courier New',monospace; font-size:12px; color:#d6d6e0; overflow-x:auto;
+  }
+  .code-box .tag{color:#8fb4e8;}
+  .code-box .attr{color:#e0c93a;}
+  .code-box .txt{color:#f0f0f0;}
+  .code-box .cmt{color:#6a8a6a;}
+
+  .result-box{
+    flex:1; min-width:220px; display:flex; align-items:center; justify-content:center;
+    background:#fafafa; border:1px dashed #ddd; border-radius:8px; padding:20px;
+  }
+  .demo-btn{
+    display:inline-block; padding:12px 26px; background:#EE3355; color:#fff;
+    border-radius:30px; font-weight:700; font-size:14px; text-decoration:none;
+    box-shadow:0 3px 8px rgba(238,51,85,0.35); transition:background 0.2s;
+  }
+
+  .summary-box{
+    margin-top:30px; background:#fdf1f3; border-left:4px solid #EE3355;
+    border-radius:4px; padding:16px 20px;
+  }
+  .summary-box p.plain{font-size:14px;}
+</style>
+<div class="top-bar">
+        <a class="btn-back" href="file:///C:/Users/pc/Downloads/Banklnwza/sss.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</head>
+<body>
+<div class="title-banner">
+  <h1>บทที่ 7</h1>
+  <h2>ระบบการเชื่อมโยง (Hyperlinks)</h2>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. Basic Links -->
+  <div class="red-tag">7.1 พื้นฐานการทำลิงก์</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="link-scene">
+        <div>
+          <div class="door-pair">
+            <div class="door">HTML</div>
+            <div class="door-arrow">→</div>
+            <div class="door">HTML</div>
+          </div>
+          <div class="path-tag">Relative Path (ภายใน)</div>
+        </div>
+        <div>
+          <div class="earth-scene">
+            <div class="door" style="width:40px;height:56px;">HTML</div>
+            <div class="plane">✈</div>
+            <div class="earth"></div>
+          </div>
+          <div class="path-tag ext">Absolute Path (ภายนอก)</div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>ใช้แท็กคู่ &lt;a&gt; (Anchor) เพื่อสร้างการเชื่อมโยง</li>
+        <li>ต้องใส่แอตทริบิวต์ href เสมอ เพื่อระบุปลายทาง</li>
+        <li>เชื่อมโยงภายใน : ใช้ Relative Path เช่น href="about.html"</li>
+        <li>เชื่อมโยงภายนอก : ใช้ Absolute Path ขึ้นต้นด้วย https:// เสมอ</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2. Link Techniques -->
+  <div class="red-tag center">7.2 เทคนิคการเชื่อมโยง</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="tech-scene">
+        <div>
+          <div class="tabs-mock">
+            <div class="tabs-bar">
+              <div class="tab">เว็บเรา</div>
+              <div class="tab new">+ แท็บใหม่</div>
+            </div>
+            <div class="tabs-body">target="_blank"</div>
+          </div>
+        </div>
+        <div class="elevator">
+          <div class="shaft">
+            <div class="car"></div>
+          </div>
+          <div class="down-arrow">↓</div>
+          <div class="label">Anchor Link<br>href="#section2"</div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="indent1" style="font-weight:600; font-size:16px;">
+        <li>target="_blank" : เปิดลิงก์ในแท็บใหม่ โดยไม่ปิดหน้าเว็บเดิม</li>
+        <li>Anchor Link : สร้างจุดหมายด้วย id แล้วกระโดดด้วย href="#id"</li>
+        <li>ช่วยยกระดับประสบการณ์ผู้ใช้งาน (UX) ให้ลื่นไหลขึ้น</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. CSS Link States -->
+  <div class="red-tag">7.3 การปรับแต่งลิงก์ด้วย CSS (Link States)</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="states-scene">
+        <div class="state-chip link">:link</div>
+        <div class="state-chip visited">:visited</div>
+        <div class="state-chip hover">:hover</div>
+        <div class="state-chip active">:active</div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>:link — สถานะปกติ ยังไม่เคยถูกคลิก</li>
+        <li>:visited — เคยคลิกไปแล้ว เบราว์เซอร์เปลี่ยนสี (มักเป็นสีม่วง)</li>
+        <li>:hover — ขณะนำเมาส์ไปวางบนลิงก์</li>
+        <li>:active — เสี้ยววินาทีขณะกำลังกดเมาส์ค้าง</li>
+        <li>ใช้ Pseudo-class ควบคุมแต่ละสถานะแยกจากกันได้อย่างอิสระ</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Example -->
+  <div class="red-tag center">ตัวอย่างการปฏิบัติ: เนรมิตข้อความลิงก์ให้เป็นปุ่มกด</div>
+  <p class="plain" style="margin-bottom:6px; text-align:center;">ใช้ CSS ลบเส้นใต้ ใส่พื้นหลัง และมุมโค้ง เพื่อแปลงลิงก์ธรรมดาให้กลายเป็นปุ่มกดสวยงาม</p>
+
+  <div class="example-block">
+    <div class="code-box">
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="txt">"contact.html"</span> <span class="attr">class</span>=<span class="txt">"btn"</span><span class="tag">&gt;</span>ติดต่อเรา<span class="tag">&lt;/a&gt;</span><br><br>
+<span class="cmt">/* CSS */</span><br>
+.btn {<br>
+&nbsp;&nbsp;<span class="attr">text-decoration</span>: none;<br>
+&nbsp;&nbsp;<span class="attr">background</span>: #EE3355;<br>
+&nbsp;&nbsp;<span class="attr">color</span>: white;<br>
+&nbsp;&nbsp;<span class="attr">padding</span>: 12px 26px;<br>
+&nbsp;&nbsp;<span class="attr">border-radius</span>: 30px;<br>
+}<br>
+.btn:<span class="attr">hover</span> { <span class="attr">background</span>: #c81f42; }
+    </div>
+
+    <div class="result-box">
+      <a href="#" class="demo-btn">ติดต่อเรา</a>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="red-tag center" style="margin-top:34px;">สรุปท้ายบท</div>
+  <div class="summary-box">
+    <p class="plain">
+      บทนี้ว่าด้วยระบบการเชื่อมโยง (Hyperlinks) ซึ่งเป็นหัวใจของ "World Wide Web"
+      โดยใช้แท็ก &lt;a&gt; คู่กับแอตทริบิวต์ href เป็นตัวระบุปลายทาง แยกเป็น Relative Path
+      สำหรับเชื่อมโยงภายในเว็บไซต์เดียวกัน และ Absolute Path สำหรับเว็บไซต์ภายนอก
+      พร้อมทั้งควบคุมพฤติกรรมการคลิกด้วย target="_blank" และสร้าง Anchor Link
+      เพื่อกระโดดข้ามเนื้อหาในหน้าเดียวกัน สุดท้ายใช้ CSS ผ่าน Pseudo-class ทั้ง 4 สถานะ
+      (:link :visited :hover :active) เพื่อตกแต่งลิงก์ให้กลมกลืนกับธีมเว็บไซต์
+      ก่อนก้าวเข้าสู่บทถัดไปเรื่อง "แบบฟอร์ม (Forms)"
+    </p>
+  </div>
+</div>
+ <div class="top-bar">
+        <a class="btn-back" href="index.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</div>
+</body>
+</html>

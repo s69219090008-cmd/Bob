@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 9 JavaScript สมองกลผู้เนรมิตชีวิตให้เว็บไซต์</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Sarabun', sans-serif;
+    background:#ffffff;
+    color:#1a1a1a;
+    line-height:1.7;
+    padding-bottom:60px;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:0 40px;}
+
+  .title-banner{
+    background:#EE3355;
+    color:#fff;
+    text-align:center;
+    padding:22px 20px 26px;
+    margin-bottom:30px;
+  }
+  .title-banner h1{font-size:22px; font-weight:700; margin-bottom:4px;}
+  .title-banner h2{font-size:22px; font-weight:700;}
+
+  .red-tag{
+    background:#EE3355;
+    color:#fff;
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:4px;
+    font-size:14px;
+    font-weight:600;
+    margin:26px 0 18px;
+  }
+  .red-tag.center{display:block; width:fit-content; margin-left:auto; margin-right:auto; text-align:center;}
+
+  ul{list-style:none;}
+  .indent1{margin-left:20px;}
+  li{margin-bottom:6px; font-size:14.5px;}
+  li::before{content:"• "; }
+
+  p.plain{margin:6px 0; font-size:14.5px;}
+
+  .list-center li{text-align:center; font-size:14.5px; margin-bottom:10px;}
+  .list-center{margin-top:10px;}
+
+  .row{display:flex; align-items:flex-start; gap:30px; margin-top:10px;}
+  .row .visual{flex:0 0 auto;}
+  .row .content{flex:1;}
+
+  h4.section-plain{font-size:14.5px; font-weight:700; margin:8px 0 4px;}
+
+  /* ===== 1. Phase blocks: HTML / CSS / JS layered robot ===== */
+  .robot-scene{width:210px; display:flex; flex-direction:column; gap:10px;}
+  .robot-layer{
+    display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px;
+    color:#fff; font-size:12px; font-weight:700;
+  }
+  .robot-layer .icon{font-size:20px;}
+  .robot-layer.skeleton{background:#5a6b7a;}
+  .robot-layer.skin{background:#3fa14a;}
+  .robot-layer.brain{background:#2a4f8f;}
+  .robot-layer small{display:block; font-weight:400; font-size:10px; opacity:.9; margin-top:2px;}
+  .robot-arrow{text-align:center; font-size:14px; color:#999;}
+
+  /* ===== 2. internal / external script scene ===== */
+  .tech-scene{width:200px; display:flex; flex-direction:column; gap:18px; align-items:center;}
+  .note-card{
+    width:170px; background:#fff7e0; border:2px dashed #d9a441; border-radius:8px; padding:10px;
+    font-size:10.5px; color:#8a6110; text-align:center; font-family:'Courier New',monospace;
+  }
+  .file-card{
+    width:150px; display:flex; align-items:center; gap:10px; background:#eaf1fd; border:2px solid #2a5db0;
+    border-radius:8px; padding:12px; font-size:11px; color:#1c3f80; font-weight:700;
+  }
+  .file-card .file-icon{font-size:24px;}
+  .link-line{width:2px; height:20px; background:#2a5db0; margin:0 auto;}
+
+  /* ===== 3. alert vs console chips ===== */
+  .msg-scene{width:200px; display:flex; flex-direction:column; gap:14px;}
+  .msg-chip{border-radius:10px; padding:12px 14px; font-size:11.5px;}
+  .msg-chip.alert-c{background:#fdecec; border:2px solid #e0602a; color:#a8390f;}
+  .msg-chip.console-c{background:#1e1e2e; border:2px solid #444; color:#9fe39f; font-family:'Courier New',monospace;}
+  .msg-chip b{display:block; margin-bottom:4px; font-size:12.5px;}
+
+  /* ===== 4. DOM control panel ===== */
+  .panel-scene{width:220px; background:#22314a; border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:8px;}
+  .panel-title{color:#9fc0ff; font-size:10px; text-align:center; letter-spacing:1px; margin-bottom:4px;}
+  .switch-row{display:flex; align-items:center; justify-content:space-between; background:#2e4066; border-radius:6px; padding:6px 10px;}
+  .switch-row span{color:#dbe6ff; font-size:10.5px; font-family:'Courier New',monospace;}
+  .switch{width:26px; height:14px; background:#3fa14a; border-radius:8px; position:relative;}
+  .switch::after{content:''; width:10px; height:10px; background:#fff; border-radius:50%; position:absolute; top:2px; right:2px;}
+  .switch.off{background:#5a6b7a;}
+  .switch.off::after{left:2px; right:auto;}
+
+  /* ===== 5/6. step scene reused from elevator idea ===== */
+  .step-scene{width:200px; display:flex; flex-direction:column; gap:10px;}
+  .step-box{
+    background:#eaf1fd; border:2px solid #2a5db0; border-radius:8px; padding:10px 12px;
+    font-family:'Courier New',monospace; font-size:11px; color:#1c3f80; text-align:center;
+  }
+  .step-num{
+    width:26px; height:26px; border-radius:50%; background:#2a5db0; color:#fff; font-weight:700;
+    display:flex; align-items:center; justify-content:center; font-size:13px; margin:0 auto 6px;
+  }
+  .before-after{width:200px; display:flex; flex-direction:column; gap:10px;}
+  .ba-box{border-radius:8px; padding:10px 12px; font-size:11.5px; text-align:center;}
+  .ba-box.before{background:#f4f4f4; color:#666; border:2px dashed #bbb;}
+  .ba-box.after{background:#e7f8ec; color:#1e7a37; border:2px solid #3fa14a; font-weight:700;}
+  .ba-label{font-size:10px; font-weight:700; text-align:center; margin-bottom:2px; color:#888;}
+
+  /* ===== onclick 3-step vertical ===== */
+  .trigger-scene{width:210px; display:flex; flex-direction:column; gap:6px;}
+  .trigger-step{display:flex; align-items:center; gap:10px;}
+  .trigger-step .dot{
+    width:24px; height:24px; border-radius:50%; background:#EE3355; color:#fff; font-size:12px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+  }
+  .trigger-step .txt{font-size:11px; color:#444;}
+  .trigger-line{width:2px; height:14px; background:#EE3355; margin-left:12px;}
+
+  /* ===== example code + button demo (reused pattern) ===== */
+  .example-block{display:flex; gap:24px; flex-wrap:wrap; margin-top:16px;}
+  .code-box{
+    flex:1; min-width:260px; background:#1e1e2e; border-radius:8px; padding:16px 18px;
+    font-family:'Courier New',monospace; font-size:12px; color:#d6d6e0; overflow-x:auto;
+  }
+  .code-box .tag{color:#8fb4e8;}
+  .code-box .attr{color:#e0c93a;}
+  .code-box .txt{color:#f0f0f0;}
+  .code-box .cmt{color:#6a8a6a;}
+  .code-box .fn{color:#c98fe8;}
+  .code-box .str{color:#a8d68a;}
+
+  .result-box{
+    flex:1; min-width:220px; display:flex; align-items:center; justify-content:center;
+    background:#fafafa; border:1px dashed #ddd; border-radius:8px; padding:20px;
+  }
+  .demo-btn{
+    display:inline-block; padding:12px 26px; background:#EE3355; color:#fff;
+    border:none; border-radius:30px; font-weight:700; font-size:14px; cursor:pointer;
+    box-shadow:0 3px 8px rgba(238,51,85,0.35); transition:background 0.2s; font-family:'Sarabun', sans-serif;
+  }
+  .demo-btn:hover{background:#c81f42;}
+  #promo-text{font-size:14px; color:#333; text-align:center; min-height:40px;}
+
+  /* ===== problem / solution comparison ===== */
+  .compare-block{display:flex; gap:20px; flex-wrap:wrap; margin-top:14px;}
+  .compare-card{flex:1; min-width:250px; border-radius:8px; padding:16px 18px;}
+  .compare-card.problem{background:#fdecec; border:2px solid #e0602a;}
+  .compare-card.solution{background:#eaf7ec; border:2px solid #3fa14a;}
+  .compare-card h5{font-size:13px; margin-bottom:8px; font-weight:700;}
+  .compare-card.problem h5{color:#a8390f;}
+  .compare-card.solution h5{color:#1e7a37;}
+  .compare-card p{font-size:12.5px; color:#444;}
+
+  /* ===== events chips (mouse/keyboard) reused states-scene idea ===== */
+  .states-scene{width:200px; display:flex; flex-direction:column; gap:10px;}
+  .state-chip{
+    border-radius:20px; padding:9px 14px; font-size:12px; font-weight:700; text-align:center;
+  }
+  .state-chip.link{background:#eaf1fd; color:#2a5db0; border:2px solid #2a5db0;}
+  .state-chip.visited{background:#f3ecfb; color:#7a3fc2; border:2px solid #7a3fc2;}
+  .state-chip.hover{background:#2a5db0; color:#fff;}
+  .state-chip.active{background:#1c3f80; color:#fff;}
+
+  /* ===== password live demo ===== */
+  .pw-demo{display:flex; flex-direction:column; gap:10px; align-items:center; width:100%;}
+  .pw-demo input{
+    width:220px; padding:10px 12px; border-radius:6px; border:2px solid #ccc; font-size:13px;
+    font-family:'Sarabun', sans-serif;
+  }
+  #pwResult{font-size:13px; font-weight:700; min-height:20px;}
+  #pwResult.ok{color:#1e7a37;}
+  #pwResult.bad{color:#a8390f;}
+
+  /* ===== interactive loop (4-step circle) ===== */
+  .loop-scene{width:100%; display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-top:16px;}
+  .loop-card{
+    flex:1; min-width:180px; max-width:210px; background:#fafafa; border:2px solid #EE3355; border-radius:10px;
+    padding:14px; text-align:center;
+  }
+  .loop-card .loop-num{
+    width:28px; height:28px; border-radius:50%; background:#EE3355; color:#fff; font-weight:700;
+    display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-size:13px;
+  }
+  .loop-card .loop-icon{font-size:22px; margin-bottom:6px;}
+  .loop-card h6{font-size:12.5px; margin-bottom:4px;}
+  .loop-card p{font-size:11px; color:#666;}
+  .loop-arrow{align-self:center; font-size:18px; color:#EE3355;}
+
+  .summary-box{
+    margin-top:30px; background:#fdf1f3; border-left:4px solid #EE3355;
+    border-radius:4px; padding:16px 20px;
+  }
+  .summary-box p.plain{font-size:14px;}
+  .summary-grid{display:flex; gap:16px; flex-wrap:wrap; margin-top:14px;}
+  .summary-pill{
+    flex:1; min-width:220px; background:#fff; border-radius:8px; padding:12px 14px;
+    border:1px solid #f3c2cd;
+  }
+  .summary-pill b{color:#EE3355; display:block; font-size:12.5px; margin-bottom:4px;}
+  .summary-pill span{font-size:12px; color:#555;}
+</style>
+<div class="top-bar">
+        <a class="btn-back" href="file:///C:/Users/pc/Downloads/Banklnwza/sss.html">
+            <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
+        </a>
+    </div>
+</head>
+<body>
+<div class="title-banner">
+  <h1>บทที่ 9</h1>
+  <h2>JavaScript สมองกลผู้เนรมิตชีวิตให้เว็บไซต์</h2>
+</div>
+
+<div class="wrap">
+
+  <!-- 9.1 บทบาทของ JavaScript -->
+  <div class="red-tag">9.1 บทบาทของ JavaScript ในเว็บไซต์</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="robot-scene">
+        <div class="robot-layer skeleton">
+          <span class="icon">🦴</span>
+          <div>HTML<br><small>โครงเหล็ก (Structure)</small></div>
+        </div>
+        <div class="robot-arrow">+</div>
+        <div class="robot-layer skin">
+          <span class="icon">🎨</span>
+          <div>CSS<br><small>เสื้อผ้าและสีสัน (Presentation)</small></div>
+        </div>
+        <div class="robot-arrow">+</div>
+        <div class="robot-layer brain">
+          <span class="icon">🧠</span>
+          <div>JavaScript<br><small>สมองกล (Behavior)</small></div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>HTML คือโครงเหล็ก โครงสร้างและชิ้นส่วนพื้นฐานที่ประกอบกันเป็นรูปร่าง</li>
+        <li>CSS คือเสื้อผ้าและสีสัน ตกแต่งผิวภายนอกให้ดูสวยงามและเป็นระเบียบ</li>
+        <li>JavaScript คือสมองกล ระบบไฟฟ้าที่สั่งการให้ขยับ โต้ตอบ และมีความคิด</li>
+        <li>เมื่อรวมกันครบทั้ง 3 ส่วน เว็บไซต์จึงเปลี่ยนจากหน้ากระดาษนิ่งให้กลายเป็นแอปพลิเคชันที่มีชีวิตชีวา</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9.2 การติดตั้งสคริปต์ -->
+  <div class="red-tag center">9.2 การติดตั้งสคริปต์เพื่อปลุกชีพสมองกล</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="tech-scene">
+        <div>
+          <div class="note-card">&lt;script&gt;<br>...โค้ด...<br>&lt;/script&gt;</div>
+        </div>
+        <div class="link-line"></div>
+        <div class="file-card">
+          <span class="file-icon">📄</span>
+          <div>main.js<br><span style="font-weight:400;font-size:9.5px;">ไฟล์แยกต่างหาก</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <h4 class="section-plain">การเขียนแบบภายใน (Internal Script)</h4>
+      <ul class="indent1">
+        <li>รูปแบบ: พิมพ์โค้ดลงในแท็ก &lt;script&gt; วางไว้ก่อนปิด &lt;/body&gt;</li>
+        <li>เปรียบเทียบ: โน้ตคำสั่งสั้นๆ แปะไว้บนตู้เย็น</li>
+        <li>การใช้งาน: เหมาะกับโค้ดขนาดเล็กที่ทำงานเฉพาะเจาะจงแค่หน้าเว็บเดียว</li>
+      </ul>
+      <h4 class="section-plain" style="margin-top:14px;">การเชื่อมไฟล์ภายนอก (External Script)</h4>
+      <ul class="indent1">
+        <li>รูปแบบ: สร้างไฟล์ .js แยก แล้วเชื่อมด้วย &lt;script src="main.js"&gt;&lt;/script&gt;</li>
+        <li>เปรียบเทียบ: คู่มือการทำงานแยกเป็นเล่มต่างหาก</li>
+        <li>การใช้งาน: มาตรฐานมืออาชีพ โค้ดสะอาด นำไปใช้ร่วมกับหน้าเว็บอื่นๆ ได้ทันที</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9.3 ช่องทางการสื่อสาร -->
+  <div class="red-tag">9.3 ช่องทางการสื่อสารของ JavaScript</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="msg-scene">
+        <div class="msg-chip alert-c"><b>alert()</b>กล่องป๊อปอัปแจ้งเตือน</div>
+        <div class="msg-chip console-c"><b>console.log()</b>ข้อความลับหลังบ้าน</div>
+      </div>
+    </div>
+    <div class="content">
+      <h4 class="section-plain">alert() (กล่องป๊อปอัปแจ้งเตือน)</h4>
+      <ul class="indent1">
+        <li>ลักษณะ: เด้งขึ้นมากลางหน้าจอ บังคับให้ผู้ใช้กด OK</li>
+        <li>ผลกระทบ: หยุดการทำงานของเว็บทั้งหมดชั่วคราว</li>
+        <li>กลุ่มเป้าหมาย: ผู้ใช้งานทั่วไป (User)</li>
+      </ul>
+      <h4 class="section-plain" style="margin-top:14px;">console.log() (ข้อความลับหลังบ้าน)</h4>
+      <ul class="indent1">
+        <li>ลักษณะ: พิมพ์ข้อความลงในเครื่องมือ Console (F12)</li>
+        <li>ผลกระทบ: ทำงานเงียบๆ ไม่รบกวนการอ่านเว็บ</li>
+        <li>กลุ่มเป้าหมาย: นักพัฒนาโปรแกรม (Developer) เพื่อทดสอบโค้ด</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9.4 DOM -->
+  <div class="red-tag center">9.4 DOM: แผงควบคุมวงจรไฟฟ้าของเว็บไซต์</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="panel-scene">
+        <div class="panel-title">DOM CONTROL PANEL</div>
+        <div class="switch-row"><span>&lt;h1&gt;</span><div class="switch"></div></div>
+        <div class="switch-row"><span>&lt;p&gt;</span><div class="switch"></div></div>
+        <div class="switch-row"><span>&lt;button&gt;</span><div class="switch off"></div></div>
+        <div class="switch-row"><span>&lt;img&gt;</span><div class="switch off"></div></div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>ทันทีที่เบราว์เซอร์อ่านโค้ด HTML เสร็จ จะสร้าง DOM ขึ้นมาครอบทับเว็บไซต์</li>
+        <li>แท็ก HTML ทุกตัวจะถูกจำลองเป็นสวิตช์บนแผงควบคุม เช่น &lt;p&gt; &lt;button&gt; &lt;div&gt; &lt;h1&gt; &lt;img&gt; &lt;ul&gt; &lt;table&gt;</li>
+        <li>หน้าที่ของ JavaScript: เอื้อมมือเข้าไปสับสวิตช์ สั่งให้หน้าเว็บขยับหรือเปลี่ยนสีได้แบบเรียลไทม์โดยไม่ต้องกดรีเฟรช</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9.5 ขั้นตอนที่ 1 -->
+  <div class="red-tag">9.5 ขั้นตอนที่ 1 : ล็อกเป้าหมายด้วย getElementById</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="step-scene">
+        <div class="step-num">1</div>
+        <div class="step-box">document.getElementById('promo-text')</div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>โค้ดคำสั่ง: document.getElementById('promo-text')</li>
+        <li>กลไกการทำงาน: เปรียบเสมือนการประกาศเรียกชื่อพนักงานผ่านเสียงตามสาย</li>
+        <li>ผลลัพธ์: แท็ก HTML ที่มีแอตทริบิวต์ id ตรงกัน จะถูก JavaScript ดึงตัวออกมารอรับคำสั่งต่อไปทันที</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9.5 ขั้นตอนที่ 2 -->
+  <div class="red-tag center">ขั้นตอนที่ 2 : เปลี่ยนแปลงความจริงด้วย .innerHTML</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="before-after">
+        <div class="ba-label">BEFORE</div>
+        <div class="ba-box before">กำลังเลือกซื้อสินค้า...</div>
+        <div class="ba-label">AFTER</div>
+        <div class="ba-box after">ยินดีด้วย! คุณได้รับส่วนลด 50%</div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>โค้ดคำสั่ง: .innerHTML = 'ข้อความใหม่';</li>
+        <li>กลไกการทำงาน: เปรียบเสมือนการเดินไปที่กระดานไวท์บอร์ด ลบข้อความเดิมทิ้งจนหมด แล้วเขียนข้อความใหม่ทับลงไป</li>
+        <li>ความพิเศษ: ข้อมูลบนหน้าจอเปลี่ยนไปทันที โดยที่เบราว์เซอร์ไม่ต้องโหลดหน้าเว็บใหม่</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9.6 onclick event -->
+  <div class="red-tag">9.6 ตัวกระตุ้นการทำงาน (The onclick Event)</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="trigger-scene">
+        <div class="trigger-step"><div class="dot">1</div><div class="txt">การกระทำ (User Action)</div></div>
+        <div class="trigger-line"></div>
+        <div class="trigger-step"><div class="dot">2</div><div class="txt">สัญญาณกริ่ง (Event Trigger)</div></div>
+        <div class="trigger-line"></div>
+        <div class="trigger-step"><div class="dot">3</div><div class="txt">ตอบสนอง (Function Execution)</div></div>
+      </div>
+    </div>
+    <div class="content">
+      <ul class="list-center">
+        <li>1. การกระทำ (User Action): ผู้ใช้งานกดคลิกปุ่มบนหน้าเว็บไซต์</li>
+        <li>2. สัญญาณกริ่ง (Event Trigger): แอตทริบิวต์ onclick ทำหน้าที่เหมือนกริ่งประตู ส่งสัญญาณแจ้งเตือน</li>
+        <li>3. ตอบสนอง (Function Execution): ปลุกชุดคำสั่ง JavaScript (Function) ที่เตรียมไว้ให้ตื่นขึ้นมาทำงานทันที</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Example 1: live button demo -->
+  <div class="red-tag center">ตัวอย่างการปฏิบัติ: เปลี่ยนข้อความหน้าเว็บด้วยปุ่มกด</div>
+  <p class="plain" style="margin-bottom:6px; text-align:center;">ล็อกเป้าหมายด้วย id แล้วเขียนทับข้อความด้วย .innerHTML เมื่อปุ่มถูกคลิก ลองกดปุ่มด้านขวาดูผลลัพธ์จริง</p>
+
+  <div class="example-block">
+    <div class="code-box">
+<span class="tag">&lt;h2</span> <span class="attr">id</span>=<span class="str">"promo-text"</span><span class="tag">&gt;</span>กดเพื่อรับส่วนลด<span class="tag">&lt;/h2&gt;</span><br>
+<span class="tag">&lt;button</span> <span class="attr">onclick</span>=<span class="str">"getBonus()"</span><span class="tag">&gt;</span>รับส่วนลด<span class="tag">&lt;/button&gt;</span><br><br>
+<span class="cmt">// JavaScript</span><br>
+<span class="fn">function</span> getBonus() {<br>
+&nbsp;&nbsp;document.getElementById(<span class="str">"promo-text"</span>)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.innerHTML = <span class="str">"ยินดีด้วย! คุณได้รับส่วนลด 50%"</span>;<br>
+}
+    </div>
+
+    <div class="result-box">
+      <div class="pw-demo">
+        <div id="promo-text">กดเพื่อรับส่วนลด</div>
+        <button class="demo-btn" onclick="document.getElementById('promo-text').innerHTML='ยินดีด้วย! คุณได้รับส่วนลด 50% ทันที'">รับส่วนลด</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9.7 ข้อจำกัดของ HTML5 -->
+  <div class="red-tag">9.7 ข้อจำกัดของ HTML5 และเหตุผลที่ต้องใช้ JavaScript</div>
+
+  <div class="compare-block">
+    <div class="compare-card problem">
+      <h5>PROBLEM: ข้อจำกัดของ HTML5</h5>
+      <p>ตรวจสอบได้แค่กฎพื้นฐาน (เช่น ห้ามเว้นว่าง, กำหนดค่าต่ำสุด-สูงสุด) แต่ไม่สามารถเช็กความซับซ้อนได้ เช่น รหัสผ่าน 2 ช่องพิมพ์ตรงกันหรือไม่</p>
+    </div>
+    <div class="compare-card solution">
+      <h5>SOLUTION: ทางออกด้วย JavaScript</h5>
+      <p>JavaScript (Custom Validation) ดึงข้อความที่กำลังพิมพ์ออกมาตรวจสอบด้วยเงื่อนไขอิสระ สร้างประสบการณ์ที่ลื่นไหลกว่า เปรียบเสมือนพนักงานรักษาความปลอดภัยสุดสมาร์ท</p>
+    </div>
+  </div>
+
+  <!-- 9.8 User events -->
+  <div class="red-tag center">9.8 การรับรู้และดักจับพฤติกรรมผู้ใช้ (User Events)</div>
+
+  <div class="row">
+    <div class="visual">
+      <div class="states-scene">
+        <div class="state-chip link">onmouseover</div>
+        <div class="state-chip hover">onmouseout</div>
+        <div class="state-chip visited">onkeydown</div>
+        <div class="state-chip active">onkeyup</div>
+      </div>
+    </div>
+    <div class="content">
+      <h4 class="section-plain">Mouse Events</h4>
+      <ul class="indent1">
+        <li>onmouseover (Mouse Hover): ทำงานทันทีเมื่อนำเมาส์ลากไปวางพาด (ยังไม่คลิก) ใช้ดึงดูดความสนใจ</li>
+        <li>onmouseout (Mouse Leave): ทำงานทันทีเมื่อลากเมาส์ออกจากวัตถุ ใช้คืนค่ารูปลักษณ์เดิม</li>
+      </ul>
+      <h4 class="section-plain" style="margin-top:14px;">Keyboard Events</h4>
+      <ul class="indent1">
+        <li>onkeydown (Key Press): ทำงานในเสี้ยววินาทีที่กดปุ่มลงไป</li>
+        <li>onkeyup (Key Release): ทำงานทันทีเมื่อปล่อยนิ้วขึ้น เหมาะสำหรับการตรวจสอบข้อมูลแบบสดๆ (Real-time) ขณะพิมพ์</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Example 2: live password checker demo -->
+  <div class="red-tag center">ตัวอย่างการปฏิบัติ: ระบบตรวจสอบรหัสผ่านอัจฉริยะแบบ Real-Time</div>
+  <p class="plain" style="margin-bottom:6px; text-align:center;">ดักจับจังหวะปล่อยนิ้วจากการพิมพ์ (onkeyup) แล้วเรียกฟังก์ชันเช็กทันทีโดยไม่ต้องรอปุ่ม Submit ลองพิมพ์ในช่องด้านขวาดูผลลัพธ์จริง</p>
+
+  <div class="example-block">
+    <div class="code-box">
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"password"</span> <span class="attr">id</span>=<span class="str">"pass1"</span> <span class="attr">onkeyup</span>=<span class="str">"checkPassword()"</span><span class="tag">&gt;</span><br>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"password"</span> <span class="attr">id</span>=<span class="str">"pass2"</span> <span class="attr">onkeyup</span>=<span class="str">"checkPassword()"</span><span class="tag">&gt;</span><br><br>
+<span class="cmt">// JavaScript</span><br>
+<span class="fn">function</span> checkPassword() {<br>
+&nbsp;&nbsp;<span class="fn">let</span> p1 = document.getElementById(<span class="str">"pass1"</span>).value;<br>
+&nbsp;&nbsp;<span class="fn">let</span> p2 = document.getElementById(<span class="str">"pass2"</span>).value;<br>
+&nbsp;&nbsp;<span class="cmt">// .value คือการดึง 'ข้อความ' ที่พิมพ์อยู่ออกมา</span><br>
+&nbsp;&nbsp;...เปรียบเทียบ p1 กับ p2...<br>
+}
+    </div>
+
+    <div class="result-box">
+      <div class="pw-demo">
+        <input type="password" id="pass1" placeholder="ตั้งรหัสผ่าน" onkeyup="checkPassword()">
+        <input type="password" id="pass2" placeholder="ยืนยันรหัสผ่านอีกครั้ง" onkeyup="checkPassword()">
+        <div id="pwResult"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9.9 Interactive loop -->
+  <div class="red-tag">9.9 วงจรแห่งการโต้ตอบ (The Interactive Loop)</div>
+  <p class="plain" style="text-align:center;">DOM ไม่ได้แก้ไฟล์ HTML โดยตรง แต่ปรับแต่งผ่านแผงควบคุมจำลอง — วงจรทั้ง 4 ขั้นนี้เกิดขึ้นซ้ำทุกครั้งที่ผู้ใช้งานโต้ตอบกับหน้าเว็บ</p>
+
+  <div class="loop-scene">
+    <div class="loop-card">
+      <div class="loop-num">1</div>
+      <div class="loop-icon">🔔</div>
+      <h6>ตัวกระตุ้น (The Trigger)</h6>
+      <p>onclick, onkeyup — ผู้ใช้งานกระทำพฤติกรรมบางอย่าง</p>
+    </div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-card">
+      <div class="loop-num">2</div>
+      <div class="loop-icon">📡</div>
+      <h6>ล็อกเป้าหมาย (The Radar)</h6>
+      <p>getElementById — JS สแกนหา DOM เพื่อระบุชิ้นส่วนที่ต้องจัดการ</p>
+    </div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-card">
+      <div class="loop-num">3</div>
+      <div class="loop-icon">🧠</div>
+      <h6>สมองกลประมวลผล (The Logic)</h6>
+      <p>Function — นำข้อมูล (.value) มาตรวจสอบเงื่อนไข</p>
+    </div>
+    <div class="loop-arrow">→</div>
+    <div class="loop-card">
+      <div class="loop-num">4</div>
+      <div class="loop-icon">🖥️</div>
+      <h6>อัปเดตหน้าจอ (The Update)</h6>
+      <p>.innerHTML — เปลี่ยนแปลงเนื้อหาหรือสีสันทันทีแบบ Real-time</p>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="red-tag center" style="margin-top:34px;">สรุปท้ายบท: จากหน้ากระดาษนิ่ง สู่จักรกลที่มีชีวิต</div>
+  <div class="summary-box">
+    <p class="plain">
+      บทนี้ว่าด้วย JavaScript สมองกลผู้เนรมิตชีวิตให้เว็บไซต์ เปลี่ยนหน้าเว็บที่ตายตัวให้กลายเป็นแอปพลิเคชันที่มีชีวิตชีวาและโต้ตอบได้แบบเรียลไทม์
+      โดยอาศัย DOM เป็นแผงควบคุมจำลอง ใช้ getElementById ล็อกเป้าหมาย แล้วเปลี่ยนแปลงเนื้อหาด้วย .innerHTML
+      พร้อมทั้งดักจับพฤติกรรมผู้ใช้งานผ่าน Event ต่างๆ ทั้งจากเมาส์และคีย์บอร์ด เพื่อสร้างการตรวจสอบข้อมูลแบบ Real-time
+      ที่ HTML เพียงอย่างเดียวทำไม่ได้ ก่อนก้าวเข้าสู่บทถัดไป
+    </p>
+    <div class="summary-grid">
+      <div class="summary-pill"><b>DOM คือกุญแจสำคัญ</b><span>JavaScript ไม่ได้แก้ไฟล์ HTML โดยตรง แต่ปรับแต่งผ่านแผงควบคุมจำลอง (DOM)</span></div>
+      <div class="summary-pill"><b>Event คือจุดเริ่มต้น</b><span>เว็บไซต์ที่โต้ตอบได้ต้องมีตัวดักจับ (Events) คอยเฝ้ารอพฤติกรรมของผู้ใช้</span></div>
+      <div class="summary-pill"><b>UX คือเป้าหมายสูงสุด</b><span>การดักจับ Validation แบบ Real-time ป้องกันข้อผิดพลาดและยกระดับความรู้สึกของผู้ใช้งานสู่ระดับมืออาชีพ</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function checkPassword() {
+  const p1 = document.getElementById('pass1').value;
+  const p2 = document.getElementById('pass2').value;
+  const result = document.getElementById('pwResult');
+  if (p2.length === 0) {
+    result.textContent = '';
+    result.className = '';
+  } else if (p1 === p2) {
+    result.textContent = '✓ รหัสผ่านตรงกัน';
+    result.className = 'ok';
+  } else {
+    result.textContent = '✗ รหัสผ่านไม่ตรงกัน';
+    result.className = 'bad';
+  }
+}
+</script>
+</body>
+</html>
