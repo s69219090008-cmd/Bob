@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>บทเรียนประจำวิชา</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="top-bar">
+    <!-- ปรับ ลิงก์ประวัติผู้จัดทำ เป็น Relative Path -->
+    <a class="btn-history" href="pega/ambatukam.html" style="text-decoration: none;">ประวัติผู้จัดทำ</a>
+</div>
+
+<h1>บทเรียนประจำวิชา</h1>
+
+<div class="grid" id="lesson-grid"></div>
+
+<script>
+    const lessons = [
+        {
+            title: "บทที่ 1: พื้นฐานและกระบวนการทำงานของเว็บไซต์",
+            desc: "เรียนรู้ตัวแปร และประเภทของข้อมูลเบื้องต้น",
+            link: "pega/Ego1.html"
+        },
+        {
+            title: "บทที่ 2: หลักการออกแบบเว็บไซต์",
+            desc: "การใช้ if-else ในการกำหนดเงื่อนไขของโปรแกรม",
+            link: "pega/Ego2.html"
+        },
+        {
+            title: "บทที่ 3: การสร้างเว็บไซต์ด้วย HTML5",
+            desc: "เข้าใจการใช้งาน HTML5",
+            link: "pega/Ego3.html"
+        },
+        {
+            title: "บทที่ 4: การจัดรูปแบบเว็บไซต์ด้วย CSS",
+            desc: "การสร้างและเรียกใช้ CSS",
+            link: "pega/Ego4.html"
+        },
+        {
+            title: "บทที่ 5: การจัดการข้อความและสื่อมัลติมีเดีย",
+            desc: "การนำเอาตัวอักษร ภาพ เสียง ภาพเคลื่อนไหว และวิดีโอมาจัดรูปแบบ บันทึก",
+            link: "pega/ego5.html"
+        },
+        {
+            title: "บทที่ 6: การสร้างตารางข้อมูล",
+            desc: "การจัดระเบียบและจัดโครงสร้างข้อมูลให้อยู่ในรูปแบบของแถว",
+            link: "pega/ego6.html"
+        },
+        {
+            title: "บทที่ 7: ระบบการเชื่อมโยง",
+            desc: "การเชื่อมต่อคอมพิวเตอร์ อุปกรณ์ หรือระบบซอฟต์แวร์ต่าง ๆ เข้าด้วยกัน เพื่อให้สื่อสารและส่งข้อมูลหากันได้อัตโนมัติ",
+            link: "pega/ego7.html"
+        },
+        {
+            title: "บทที่ 8: การออกแบบและสร้างฟอร์ม (Forms)",
+            desc: "การสร้างแบบฟอร์มเพื่อรับข้อมูลจากผู้ใช้งาน เช่น กล่องข้อความ และปุ่มกด", // ปรับคำอธิบายให้ตรงบทเรียน
+            link: "pega/ego8.html"
+        }, // <-- เติมเครื่องหมายจุลภาค (,) ที่ขาดไปตรงนี้แล้วครับ
+        {
+            title: "บทที่ 9: JavaScript สมองกลผู้เนรมิตชีวิตให้เว็บไซต์",
+            desc: "การเขียนโค้ดเพื่อเพิ่มการโต้ตอบ ความเป็นไดนามิก และการประมวลผลบนเว็บไซต์", // ปรับคำอธิบายให้ตรงบทเรียน
+            link: "pega/ego9.html"
+        }
+    ];
+
+    const grid = document.getElementById("lesson-grid");
+    grid.innerHTML = lessons.map(item => `
+        <div class="card">
+            <h2>${item.title}</h2>
+            <p>${item.desc}</p>
+            <a class="enter-btn" href="${item.link}">
+                เข้าสู่บทเรียน
+            </a>
+        </div>
+    `).join("");
+</script>
+
+</body>
+</html>
